@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "305148276044",
+    "firebase_url": "https://oakomunita-a34ef.firebaseio.com",
+    "project_id": "oakomunita-a34ef",
+    "storage_bucket": "oakomunita-a34ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305148276044:android:9a7a033244f9ce0b",
+        "android_client_info": {
+          "package_name": "oak.oakapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305148276044-957700j7vjk1g6jmp7vlug79qjbt55jt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "oak.oakapplication",
+            "certificate_hash": "6a39803da680571282101c7fbd105365c31c3bd8"
+          }
+        },
+        {
+          "client_id": "305148276044-kt3avli12519iubch671d0vlh3rqkc91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkEPfqf9CN532eI1qmKc7RrWrr25u5Org"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305148276044-kt3avli12519iubch671d0vlh3rqkc91.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

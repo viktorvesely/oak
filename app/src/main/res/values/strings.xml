@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Oakapplication</string>
+    <string name="title_activity_main_screen">MainScreen</string>
+    <string name="facebook_app_id">1916678708584576</string>
+
+    <string name="min_tags">Aspon jeden tag</string>
+    <string name="max_tags">Maximalne 4 tagy</string>
+    <string name="no_title">Musis zadat nadpis</string>
+    <string name="no_text">Musis napisat nejaky text do postu</string>
+    <string name="complete_action">Dokonci akciu s</string>
+    <string name="no_internet_connection">Nemas pripojenie k internetu</string>
+    <string name="no_address_found">Nenasla sa zaidna adresa</string>
+    <string name="you_wasnt_there">je nam luto ze si nebol aktivny teraz nemas rep za to</string>
+    <string name="just_now">prave teraz</string>
+    <string name="one_minute_ago">pred minutkou</string>
+    <string name="one_hour_ago">pred hodinou</string>
+    <string name="yesterday">vcera</string>
+    <string name="x_days_ago"> dnami</string>
+    <string name="x_minutes_ago"> minutami</string>
+    <string name="x_hours_ago"> hodinami</string>
+
+
+    <string name="default_rank">Obcan</string>
+    <string name="rank_level1">SuperObcan</string>
+    <string name="rank_level2">SuperSuperObcan</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
+
+
+</resources>
