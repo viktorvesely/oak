@@ -26,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PostsActivity" />
-        <activity android:name=".openPost"></activity>
+        <activity android:name=".openPost" />
+        <activity android:name=".Feedbacky"></activity>
     </application>
 
 </manifest>
