@@ -25,7 +25,9 @@ import java.util.List;
 public class User {
 
     User () {
-
+        mOwnPosts = new ArrayList<String>();
+        mOwnComments = new ArrayList<String>();
+        mFavoritePosts = new ArrayList<String>();
     }
 
     public String mUsername;
@@ -57,6 +59,8 @@ public class User {
         mActive = isActive;
         if (mActive == false)
             return false;
+
+
         mUsername = username;
         mReputation = reputation;
         mLevel = OakappMain.getRankLevelFromRep(mReputation);

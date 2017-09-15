@@ -11,10 +11,15 @@ import java.util.List;
 
 public class Post {
 
-    public Post() { }
+    public Post() {
+        this.comments = new ArrayList<String>();
+        this.comments.add("INIT");
+    }
 
     public Post (String postText, String title ,String ownerOfPost, String ImgURL, String ImgURL2,
                  String Tags, long Category, double Latitude, double Longitude, boolean wasCreated) {
+        this.comments = new ArrayList<String>();
+        this.comments.add("INIT");
         this.mText = postText;
         this.mTitle = title;
         this.mOwner = ownerOfPost;

@@ -23,6 +23,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,15 @@ public class OakappMain extends Application {
         firebaseUser = null;
         selfPointer = this;
         postsToShow = new ArrayList<Post>();
+        rankBorders = new ArrayList<Long>();
         remoteConfig = FirebaseRemoteConfig.getInstance();
         loacationProvider = LocationServices.getFusedLocationProviderClient(this);
+
+
+        long numberOfRanks = remoteConfig.getLong("count_levels");
+        for (int i = 2; i < numberOfRanks + 1; ++i) {
+            OakappMain.rankBorders.add(remoteConfig.getLong("rep_min_" + String.valueOf(i) + "_level" ));
+        }
 
         locationListener = new LocationListener() {
             @Override
@@ -57,7 +65,6 @@ public class OakappMain extends Application {
 
     }
 
-    public static FirebaseRemoteConfig remoteConfig;
 
     static String  getRankFromLevel(int level)  { return selfPointer.getString(R.string.default_rank +  level); }
 
@@ -132,16 +139,13 @@ public class OakappMain extends Application {
 
 
     public static boolean HasInternetAcces() {
-        Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+            return !ipAddr.equals("");
 
-        return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static void SaveUserByUid(final User user) {
@@ -195,6 +199,7 @@ public class OakappMain extends Application {
     private static final float LOCATION_REFRESH_DISTANCE = 100;
     private static final long LOCATION_REFRESH_TIME = 1000 * 60 *1;
 
+    public static FirebaseRemoteConfig remoteConfig;
 
     public static ArrayList<Post> postsToShow;
     public static User user;
@@ -203,5 +208,5 @@ public class OakappMain extends Application {
     public static OakappMain selfPointer;
     public static final int MAXRANKLEVEL = 30;
 
-    public static List<Long> rankBorders;
+    public static ArrayList<Long> rankBorders;
 }

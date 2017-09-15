@@ -13,6 +13,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 import java.util.ArrayList;
 
 public class openPost extends AppCompatActivity {
@@ -37,12 +43,12 @@ public class openPost extends AppCompatActivity {
         setContentView(R.layout.activity_open_post);
 
 
+        mCommentAction = (EditText) findViewById(R.id.et_comment);
         adapter = new CommentArrayAdapter(this,mComments);
         main = (OakappMain) getApplicationContext();
-        Intent intent = getIntent();
         mComments = null;
         listView_comments = (ListView) findViewById(R.id.lv_commentsInPost);
-        mPost = OakappMain.postsToShow.get(intent.getIntExtra("id", 0));
+        mPost = OakappMain.postsToShow.get(getIntent().getIntExtra("id", 0));
         OakappMain.getUserByUid(mPost.mOwner, new UserInterface() {
             @Override
             public void UserListener(User u) {
@@ -79,28 +85,42 @@ public class openPost extends AppCompatActivity {
             }
         });
 
-        for (int i = 0; i < mPost.comments.size(); ++i) {
-            OakappMain.getCommentByKey(mPost.comments.get(i), new CommentListener() {
-                @Override
-                public void OnFinished(Comment c) {
-                    adapter.add(c);
-                    if (mComments.size() == mPost.comments.size()) {
-                        //mComments.sort(new CommentComparator()); also find out why the fuck it wont let me to
-                        int specialID = FindSpecialComment();
+        Query filter =  FirebaseDatabase.getInstance().getReference().child("Comments").orderByChild("mMotherPost").equalTo(mPost.mKey);
+        filter.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Comment c =  dataSnapshot.getValue(Comment.class);
+                adapter.add(c);
+                if (mComments.size() == mPost.comments.size()) {
+                    //mComments.sort(new CommentComparator()); also find out why the fuck it wont let me to
 
-                        listView_comments.setAdapter(adapter);
-                        if (specialID != -1) {
-                            mComments.add(0, mComments.get(specialID));
-                            // decorate it
-                        }
-
-                        //also draw them
-                    }
+                    listView_comments.setAdapter(adapter);
+                    //int specialID = FindSpecialComment(); maybe in next update (returns -1 if there is no special comment)
                 }
-            });
-        }
-    }
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 
     private int FindSpecialComment() {

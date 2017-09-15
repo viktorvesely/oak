@@ -11,6 +11,14 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/b_editComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:text="Button" />
+
+        <Button
             android:id="@+id/b_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

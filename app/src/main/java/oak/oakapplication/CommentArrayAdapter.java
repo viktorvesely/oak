@@ -1,15 +1,21 @@
 package oak.oakapplication;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by vikto on 8/31/2017.
@@ -24,8 +30,11 @@ class CommentView{
     public ImageView mPicture;
     public Button mPlus;
     public Button mMinus;
+    public Button mEditComment;
+    public int position;
 
-    CommentView (View v) {
+    CommentView (View v, int position) {
+        mEditComment = (Button) v.findViewById(R.id.b_editComment);
         mOwner = (TextView) v.findViewById(R.id.tv_commentOwner);
         mText = (TextView) v.findViewById(R.id.tv_commentText);
         mTime = (TextView) v.findViewById(R.id.tv_timeSince);
@@ -50,8 +59,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
     }
 
     @Override
-    public View getView(int position, View viewConverter, ViewGroup parent) {
-        final Comment comment = getItem(position);
+    public View getView(int position, View viewConverter, final ViewGroup parent) {
+        Comment comment = getItem(position);
 
         switch (getItemViewType(position)){
             case COMMENT:
@@ -59,18 +68,23 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 
                 if (viewConverter == null) {
                     viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.comment_item, parent, false);
-                    commentView = new CommentView(viewConverter);
+                    commentView = new CommentView(viewConverter, position);
 
 
                 }
 
                 else commentView = (CommentView) viewConverter.getTag();
 
+                if (OakappMain.firebaseUser.getUid().equals(comment.mComOwner)) {
+                    commentView.mEditComment.setVisibility(View.VISIBLE);
+                }
+                else commentView.mEditComment.setVisibility(View.GONE);
 
                 commentView.mMinus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Comment com =  comment;
+                        CommentView cv = (CommentView) v.getTag();
+                        Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
                         com.mUpvotes -= 1;
                         OakappMain.SaveCommentByKey(com);
                     }
@@ -78,9 +92,37 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                 commentView.mPlus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Comment com =  comment;
+                        CommentView cv = (CommentView) v.getTag();
+                        Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
                         com.mUpvotes += 1;
                         OakappMain.SaveCommentByKey(com);
+                    }
+                });
+                final View view =  LayoutInflater.from(getContext()).inflate(R.layout.dialog_box_create_comment,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+                builder.setView(view);
+                final AlertDialog dialog = builder.create();
+                commentView.mEditComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CommentView cv = (CommentView) v.getTag();
+                        Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
+                        Button cancel = (Button) view.findViewById(R.id.b_cancel);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.hide();
+                            }
+                        });
+                        Button confirm = (Button) view.findViewById(R.id.b_change);
+                        confirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // checks and saving
+                            }
+                        });
+
+                        dialog.show();
                     }
                 });
                 commentView.mUpvotes.setText(comment.mUpvotes);
