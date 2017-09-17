@@ -69,7 +69,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                 if (viewConverter == null) {
                     viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.comment_item, parent, false);
                     commentView = new CommentView(viewConverter, position);
-
+                    viewConverter.setTag(commentView);
 
                 }
 
@@ -80,6 +80,9 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                 }
                 else commentView.mEditComment.setVisibility(View.GONE);
 
+
+                commentView.mMinus.setTag(commentView);
+                commentView.mPlus.setTag(commentView);
                 commentView.mMinus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -98,6 +101,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                         OakappMain.SaveCommentByKey(com);
                     }
                 });
+
+
                 final View view =  LayoutInflater.from(getContext()).inflate(R.layout.dialog_box_create_comment,null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
                 builder.setView(view);
@@ -108,6 +113,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                         CommentView cv = (CommentView) v.getTag();
                         Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
                         Button cancel = (Button) view.findViewById(R.id.b_cancel);
+
+
                         cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
