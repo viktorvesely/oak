@@ -12,11 +12,11 @@
         android:id="@+id/b_signOut"
         android:layout_width="52dp"
         android:layout_height="75dp"
+        android:layout_marginBottom="42dp"
         android:layout_marginLeft="16dp"
-        android:text="odhlasit"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/mainscreen_b_signOut"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="42dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <ScrollView
         android:layout_width="304dp"

@@ -12,7 +12,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="16dp"
-        android:hint="Komentar"
+        android:hint="@string/createCom_et_TextDialog"
         android:inputType="text" />
 
     <CheckBox
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="false"
-        android:text="Priama Sprava" />
+        android:text="@string/createCom_cb_dc" />
 
     <EditText
         android:id="@+id/et_targetName"

@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zmen" />
+            android:text="@string/editCom_b_change" />
 
         <Button
             android:id="@+id/b_cancel"
@@ -29,6 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zrusit" />
+            android:text="@string/editCom_b_cancel" />
     </LinearLayout>
 </LinearLayout>

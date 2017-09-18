@@ -26,15 +26,57 @@
     <string name="short_username">Prezyvka musi byt aspon 4 pismenka dlha plz ludia</string>
     <string name="duplicate_name">Uz ta niekto predbehol</string>
 
-
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>
     <string name="rank_level2">SuperSuperObcan</string>
+
+    <string name="Posts_et_text">Git</string>
+    <string name="Posts_et_title">Ma nema</string>
+    <string name="posts_tw_categories">rad</string>
+    <string name="Posts_b_addImg2">robim</string>
+    <string name="Posts_b_addImg1">to uz</string>
+    <string name="Posts_et_location">druhy krat</string>
+    <string name="Posts_et_tags">a</string>
+    <string name="Posts_b_post">tak</string>
+
+    <string name="ci_b_edit">edit</string>
+    <string name="ci_b_plus">+?</string>
+    <string name="ci_b_minus">-?</string>
+    <string name="ci_b_editPost">Edti Post ??</string>
+
+    <string name="mainscreen_b_signOut">Odhlasit</string>
+
+    <string name="createCom_et_TextDialog">Komentar</string>
+    <string name="createCom_cb_dc">Priama sprava</string>
+
+    <string name="editCom_b_change">Zmen</string>
+    <string name="editCom_b_cancel">Zrus</string>
 
     <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string-array name="mestske_casti">
+        <item>"Staré Mesto"</item>
+        <item>"Ružinov"</item>
+        <item>"Vrakuňa"</item>
+        <item>"Podunajské Biskupice"</item>
+        <item>"Nové Mesto"</item>
+        <item>"Rača"</item>
+        <item>"Vajnory"</item>
+        <item>"Karlova Ves"</item>
+        <item>"Dúbravka"</item>
+        <item>"Lamač"</item>
+        <item>"Devín"</item>
+        <item>"Devínska Nová Ves"</item>
+        <item>"Záhorská Bystrica"</item>
+        <item> "Petržalka"</item>
+        <item>"Jarovce"</item>
+        <item>"Rusovce"</item>
+        <item>"Čunovo"</item>
+        <item>"Magistrát hlavného mesta"</item>
+        <item>"Rôzne"</item>
+    </string-array>
 
 </resources>

@@ -9,20 +9,32 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+
 public class Feedbacky extends AppCompatActivity {
+
+    public static Feedbacky selfPointer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedbacky);
 
-        String[] casti = {"Staré Mesto", "Ružinov", "Vrakuňa", "Podunajské Biskupice",
-                "Nové Mesto", "Rača", "Vajnory", "Karlova Ves", "Dúbravka", "Lamač", "Devín",
-                "Devínska Nová Ves", "Záhorská Bystrica", "Petržalka", "Jarovce", "Rusovce",
-                "Čunovo", "Magistrát hlavného mesta", "Rôzne"};
+        final String[] casti = getResources().getStringArray(R.array.mestske_casti);
+
         ListAdapter feedbAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, casti);
         ListView zoznam = (ListView) findViewById(R.id.lv_mest_casti);
         zoznam.setAdapter(feedbAdapter);
+
+        zoznam.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent openFeedback = new Intent(selfPointer, oak.oakapplication.openPost.class);
+                openFeedback.putExtra("cast", casti[position]);
+                startActivity(openFeedback);
+            }
+        });
+
 
     }
 }
