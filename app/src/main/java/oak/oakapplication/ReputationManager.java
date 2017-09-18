@@ -24,6 +24,7 @@ public class ReputationManager {
             Snackbar.make(v,OakappMain.selfPointer.getString(R.string.you_wasnt_there),Snackbar.LENGTH_SHORT).setAction("Action", null).show();
         }
 
+        OakappMain.user.lastLogged = System.currentTimeMillis();
     }
 
     public static void  LikePost(int likeLevel, int postId, User user) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.SystemClock;
 
 import com.firebase.client.Firebase;
@@ -31,10 +32,12 @@ public class User {
     }
 
     public String mUsername;
+    public String mUniqueName;
     public int mReputation;
     public long mJudgePower;
     public boolean mActive;
     public boolean mAdmin;
+    public Uri mPhoto;
     public List<String> mOwnPosts;
     public List<String> mOwnComments;
     public List<String>mFavoritePosts;
@@ -59,7 +62,6 @@ public class User {
         mActive = isActive;
         if (mActive == false)
             return false;
-
 
         mUsername = username;
         mReputation = reputation;

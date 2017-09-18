@@ -7,11 +7,15 @@ import com.facebook.FacebookSdk;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 
 
@@ -169,16 +173,12 @@ public class MainScreen extends AppCompatActivity {
                         @Override
                         public void UserListener(User u) {
                             OakappMain.user = u;
-                            ReputationManager.Init(findViewById(android.R.id.content).getRootView());
-                            OakappMain.user.lastLogged = System.currentTimeMillis();
-                            attachDatabaseReadListener();
-                        }
-                    });
+                            InitUser();
+                }
+            });
                 }
                 else {
-                    User u = new User();
-                    u.ActivateUser(OakappMain.firebaseUser.getDisplayName(),0,true,false, OakappMain.firebaseUser.getUid());
-                    mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
+                    RegisterUser();
                 }
             }
 
@@ -242,5 +242,31 @@ public class MainScreen extends AppCompatActivity {
     }
 
 
+    private void InitUser() {
+        if (OakappMain.user.mActive == false) {
+            Intent deactivate = new Intent(this, Deactivate.class);
+            startActivity(deactivate);
+        }
 
+        ReputationManager.Init(findViewById(android.R.id.content).getRootView());
+
+
+        if (OakappMain.user.mAdmin)
+            AdminSettings.Activate();
+
+        attachDatabaseReadListener();
+    }
+
+
+    private void RegisterUser() {
+        User u = new User();
+        OakappMain.user = u;
+
+        if(OakappMain.user.ActivateUser(OakappMain.firebaseUser.getDisplayName(),0,true,false, OakappMain.firebaseUser.getUid()) == false ) {
+            Intent deactivate = new Intent(this, Deactivate.class);
+            startActivity(deactivate);
+        }
+
+        mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
+    }
 }

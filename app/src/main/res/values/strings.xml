@@ -18,16 +18,23 @@
     <string name="x_days_ago"> dnami</string>
     <string name="x_minutes_ago"> minutami</string>
     <string name="x_hours_ago"> hodinami</string>
+    <string name="username">Prezyvka</string>
+    <string name="button_pick_picture">Z galerie</string>
+    <string name="button_continue">dalej</string>
+    <string name="deactivate_msg">Tvoje konto bolo zrusene ak si myslis ze nastala chyba kontaktuj nas</string>
+    <string name="no_photo_selected">Musis si zvolit fotku</string>
+    <string name="short_username">Prezyvka musi byt aspon 4 pismenka dlha plz ludia</string>
+    <string name="duplicate_name">Uz ta niekto predbehol</string>
 
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>
     <string name="rank_level2">SuperSuperObcan</string>
 
+    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
 
 </resources>

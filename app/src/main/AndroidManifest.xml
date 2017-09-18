@@ -27,7 +27,9 @@
         </activity>
         <activity android:name=".PostsActivity" />
         <activity android:name=".openPost" />
-        <activity android:name=".Feedbacky"></activity>
+        <activity android:name=".Feedbacky" />
+        <activity android:name=".Registration" />
+        <activity android:name=".Deactivate"></activity>
     </application>
 
 </manifest>

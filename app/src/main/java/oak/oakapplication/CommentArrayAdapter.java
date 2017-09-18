@@ -113,8 +113,6 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                         CommentView cv = (CommentView) v.getTag();
                         Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
                         Button cancel = (Button) view.findViewById(R.id.b_cancel);
-
-
                         cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

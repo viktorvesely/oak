@@ -8,7 +8,7 @@ public class AdminSettings {
     public static boolean showInActivePosts = false;
     public static boolean showInActiveComments = false;
     public static void Activate(){
-        showInActiveComments=true;
-        showInActivePosts=true;
+        showInActiveComments = true;
+        showInActivePosts = true;
     }
 }
