@@ -47,6 +47,14 @@ public class PostsActivity extends AppCompatActivity {
     private String[] mArraySpinner;
     private Spinner mCategories;
 
+    private String mMedium;
+    private int mType1_n;
+    private int mType1_x;
+    private int mType2_n;
+    private int mType2_x;
+    private int mType3_n;
+    private int mType3_x;
+
 
     private final static int MaxTagsPerPost = 3;
     private final String[] categories = {"Problemy","V procese", "Vyriesene"};

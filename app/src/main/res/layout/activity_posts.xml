@@ -31,7 +31,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/b_addImg1"
-        app:layout_constraintVertical_bias="0.765" />
+        app:layout_constraintVertical_bias="0.965" />
 
     <Button
         android:id="@+id/b_addImg1"
@@ -79,17 +79,15 @@
         android:id="@+id/et_tags"
         android:layout_width="225dp"
         android:layout_height="38dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="60dp"
         android:ems="10"
         android:hint="@string/Posts_et_tags"
         android:inputType="textPersonName"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/b_post"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteX="75dp"
-        tools:layout_editor_absoluteY="378dp" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/et_location"

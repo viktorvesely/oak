@@ -29,9 +29,9 @@ public class Feedbacky extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent openFeedback = new Intent(selfPointer, oak.oakapplication.openPost.class);
-                openFeedback.putExtra("cast", casti[position]);
-                startActivity(openFeedback);
+                Intent intent = new Intent(selfPointer, oak.oakapplication.Feedback.class);
+                intent.putExtra("cast", casti[position]);
+                startActivity(intent);
             }
         });
 
