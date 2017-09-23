@@ -29,7 +29,7 @@ public class Feedbacky extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(selfPointer, oak.oakapplication.Feedback.class);
+                Intent intent = new Intent(selfPointer, oak.oakapplication.openFeedback.class);
                 intent.putExtra("cast", casti[position]);
                 startActivity(intent);
             }
