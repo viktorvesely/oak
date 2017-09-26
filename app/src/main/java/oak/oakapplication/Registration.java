@@ -66,7 +66,7 @@ public class Registration extends AppCompatActivity {
                                                  Snackbar.make(v, getString(R.string.short_username), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                              else {
                                                  CheckForExistingUser();
-                                                 //TODO: sleep
+                                                 //TODO: sleep and do push !
                                                  if (duplicate) {
                                                      Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.duplicate_name), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                                  }
