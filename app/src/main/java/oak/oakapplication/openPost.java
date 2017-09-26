@@ -42,9 +42,9 @@ public class openPost extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_post);
 
-
         mCommentAction = (EditText) findViewById(R.id.et_comment);
         adapter = new CommentArrayAdapter(this,mComments);
+        listView_comments.setAdapter(adapter);
         main = (OakappMain) getApplicationContext();
         mComments = null;
         listView_comments = (ListView) findViewById(R.id.lv_commentsInPost);
@@ -94,7 +94,6 @@ public class openPost extends AppCompatActivity {
                 if (mComments.size() == mPost.comments.size()) {
                     //mComments.sort(new CommentComparator()); also find out why the fuck it wont let me to
 
-                    listView_comments.setAdapter(adapter);
                     //int specialID = FindSpecialComment(); maybe in next update (returns -1 if there is no special comment)
                 }
             }

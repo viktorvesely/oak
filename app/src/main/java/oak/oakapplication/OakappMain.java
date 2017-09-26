@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
+import com.firebase.client.utilities.Base64;
 import com.google.android.gms.location.LocationListener;
 import com.firebase.client.Firebase;
 import com.firebase.client.core.Context;
@@ -22,7 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,16 +139,41 @@ public class OakappMain extends Application {
         });
     }
 
+    public static void getUserByUsername(final String uName, final UserInterface callback) {
+        Query filter = FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("mUniqueName").equalTo(uName);
+
+        filter.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callback.UserListener(dataSnapshot.getValue(User.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     public static boolean HasInternetAcces() {
+        Runtime runtime = Runtime.getRuntime();
         try {
-            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-            return !ipAddr.equals("");
+            Process ipProcess = runtime.exec("/system/bin/ping -W 2 -c 2 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(ipProcess.getInputStream()));
 
-        } catch (Exception e) {
-            return false;
+            String s;
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+            return (exitValue == 0);
         }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
     }
 
     public static void SaveUserByUid(final User user) {
@@ -207,6 +235,7 @@ public class OakappMain extends Application {
 
     public static OakappMain selfPointer;
     public static final int MAXRANKLEVEL = 30;
+    public static final String NO_PICTURE = "no_pic";
 
     public static ArrayList<Long> rankBorders;
 }

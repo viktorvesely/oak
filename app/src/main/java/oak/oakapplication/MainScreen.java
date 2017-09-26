@@ -267,6 +267,9 @@ public class MainScreen extends AppCompatActivity {
             startActivity(deactivate);
         }
 
+        Intent extraRegInfo = new Intent(this, Registration.class);
+        startActivity(extraRegInfo);
+
         mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
     }
 }

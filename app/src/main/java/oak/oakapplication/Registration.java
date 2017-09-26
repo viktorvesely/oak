@@ -56,24 +56,27 @@ public class Registration extends AppCompatActivity {
 
 
         mContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPhoto == null)
-                    Snackbar.make(v, getString(R.string.no_photo_selected), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                else {
-                    OakappMain.user.mPhoto = mPhoto;
-                    if (mUsername.getText().length() >= mMinUsernameLength)
-                        Snackbar.make(v, getString(R.string.short_username), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    else {
-                        CheckForExistingUser();
-                        //TODO: sleep
-                        if (duplicate) {
-                            Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.duplicate_name), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                        }
-                        else finish();
-                    }
-                }
-            }
+                                         @Override
+                                         public void onClick(View v) {
+                                             if (mPhoto == null) {
+                                                 mPhoto = Uri.parse(OakappMain.NO_PICTURE);
+                                             }
+                                             OakappMain.user.mPhoto = mPhoto;
+                                             if (mUsername.getText().length() >= mMinUsernameLength)
+                                                 Snackbar.make(v, getString(R.string.short_username), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                             else {
+                                                 CheckForExistingUser();
+                                                 //TODO: sleep
+                                                 if (duplicate) {
+                                                     Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.duplicate_name), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                                 }
+                                                 else {
+                                                     OakappMain.user.mPhoto = mPhoto;
+                                                     OakappMain.user.mUniqueName = mUsername.getText().toString();
+                                                     finish();
+                                                 }
+                                             }
+                                         }
         });
 
         mPickImg.setOnClickListener(new View.OnClickListener() {
