@@ -23,12 +23,13 @@
     <string name="button_continue">dalej</string>
     <string name="deactivate_msg">Tvoje konto bolo zrusene ak si myslis ze nastala chyba kontaktuj nas</string>
     <string name="no_photo_selected">Musis si zvolit fotku</string>
-    <string name="short_username">Prezyvka musi byt aspon 4 pismenka dlha plz ludia</string>
+    <string name="bad_username">Prezyvka musi byt: dlshia ako 4, nensia ako 15 a nesmie obsahovat specialne znaky</string>
     <string name="duplicate_name">Uz ta niekto predbehol</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>
     <string name="rank_level2">SuperSuperObcan</string>
+    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
     <string name="Posts_et_text">Git</string>
     <string name="Posts_et_title">Ma nema</string>
@@ -51,8 +52,6 @@
 
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>
-
-    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

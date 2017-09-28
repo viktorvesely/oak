@@ -1,9 +1,11 @@
 package oak.oakapplication;
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import com.firebase.client.utilities.Base64;
@@ -69,7 +71,12 @@ public class OakappMain extends Application {
     }
 
 
-    static String  getRankFromLevel(int level)  { return selfPointer.getString(R.string.default_rank +  level); }
+
+    static String  getRankFromLevel(int level)  {
+        if (level == -1) {
+            return  "ERROR";
+        }
+        return Resources.getSystem().getString(R.string.default_rank +  level); }
 
     static int getRankLevelFromRep(int reputation) {
 
@@ -83,15 +90,15 @@ public class OakappMain extends Application {
     }
 
 
-    public static void getUserByUid(String uid,final UserInterface ui)
+    public static void getUserByUid(final String uid,final UserInterface ui)
     {
-        Query filter =  FirebaseDatabase.getInstance().getReference().child("Users").orderByKey().equalTo(uid);
+        Query filter =  FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("mId").equalTo(uid);
 
 
         filter.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User u = dataSnapshot.getValue(User.class);
+                User u = dataSnapshot.child(uid).getValue(User.class);
                 ui.UserListener(u);
             }
 
@@ -105,12 +112,12 @@ public class OakappMain extends Application {
 
     public static void getPostByKey(final String id, final PostListener listener)
     {
-        Query filter = FirebaseDatabase.getInstance().getReference().child("Posts").orderByKey().equalTo(id);
+        Query filter = FirebaseDatabase.getInstance().getReference().child("Posts").orderByChild("mKey").equalTo(id);
 
         filter.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Post p = dataSnapshot.getValue(Post.class);
+                Post p = dataSnapshot.child(id).getValue(Post.class);
                 listener.OnFinished(p);
             }
 
@@ -123,12 +130,12 @@ public class OakappMain extends Application {
 
     public static void getCommentByKey(final String id, final CommentListener listener)
     {
-        Query filter = FirebaseDatabase.getInstance().getReference().child("Comments").orderByKey().equalTo(id);
+        Query filter = FirebaseDatabase.getInstance().getReference().child("Comments").orderByChild("mKey").equalTo(id);
 
         filter.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Comment c = dataSnapshot.getValue(Comment.class);
+                Comment c = dataSnapshot.child(id).getValue(Comment.class);
                 listener.OnFinished(c);
             }
 
@@ -159,7 +166,7 @@ public class OakappMain extends Application {
     public static boolean HasInternetAcces() {
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -W 2 -c 2 8.8.8.8");
+            Process ipProcess = runtime.exec("/system/bin/ping -W 1 -c 2 8.8.8.8");
             int     exitValue = ipProcess.waitFor();
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(ipProcess.getInputStream()));

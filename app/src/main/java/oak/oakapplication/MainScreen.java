@@ -121,8 +121,7 @@ public class MainScreen extends AppCompatActivity {
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())) //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -174,8 +173,8 @@ public class MainScreen extends AppCompatActivity {
                         public void UserListener(User u) {
                             OakappMain.user = u;
                             InitUser();
-                }
-            });
+                         }
+                    });
                 }
                 else {
                     RegisterUser();
@@ -270,6 +269,6 @@ public class MainScreen extends AppCompatActivity {
         Intent extraRegInfo = new Intent(this, Registration.class);
         startActivity(extraRegInfo);
 
-        mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
+
     }
 }
