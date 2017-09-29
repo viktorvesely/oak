@@ -110,6 +110,26 @@ public class OakappMain extends Application {
 
     }
 
+    public static void getUserByUsername(final User user,final UserInterface callBack)
+    {
+        Query filter =  FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("mUniqueName").equalTo(user.mUniqueName);
+
+
+        filter.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.child(user.mId).getValue(User.class);
+                callBack.UserListener(u);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     public static void getPostByKey(final String id, final PostListener listener)
     {
         Query filter = FirebaseDatabase.getInstance().getReference().child("Posts").orderByChild("mKey").equalTo(id);
@@ -146,21 +166,6 @@ public class OakappMain extends Application {
         });
     }
 
-    public static void getUserByUsername(final String uName, final UserInterface callback) {
-        Query filter = FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("mUniqueName").equalTo(uName);
-
-        filter.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                callback.UserListener(dataSnapshot.getValue(User.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
     public static boolean HasInternetAcces() {
@@ -243,6 +248,8 @@ public class OakappMain extends Application {
     public static OakappMain selfPointer;
     public static final int MAXRANKLEVEL = 30;
     public static final String NO_PICTURE = "no_pic";
+    public static final String THIS_USER = "this";
+
 
     public static ArrayList<Long> rankBorders;
 }

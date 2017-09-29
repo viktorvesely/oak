@@ -33,4 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/b_myProfile"
+        android:layout_width="49dp"
+        android:layout_height="91dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/b_signOut"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="295dp" />
 </android.support.constraint.ConstraintLayout>

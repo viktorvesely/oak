@@ -118,7 +118,6 @@ public class Registration extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     mPhoto = taskSnapshot.getDownloadUrl();
-                    View v = findViewById(android.R.id.content);
                     Glide.with(mProfilePicture.getContext()).load(mPhoto).into(mProfilePicture);
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {

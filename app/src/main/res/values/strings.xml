@@ -53,6 +53,9 @@
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>
 
+    <string name="profile_tv_reputation">Rep</string>
+    <string name="profile_b_savedPosts">Ulozene posty</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

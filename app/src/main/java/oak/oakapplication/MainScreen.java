@@ -55,6 +55,7 @@ public class MainScreen extends AppCompatActivity {
     private static int RC_SIGN_IN = 1;
 
     private Button mButtonSignOut;
+    private Button mMyProfile;
 
 
     @Override
@@ -76,6 +77,7 @@ public class MainScreen extends AppCompatActivity {
         mButtonSignOut = (Button) findViewById(R.id.b_signOut);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
+        mMyProfile = (Button) findViewById(R.id.b_myProfile);
 
         //Init
         selfPointer = this;
@@ -132,6 +134,15 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AuthUI.getInstance().signOut(selfPointer);
+            }
+        });
+
+        mMyProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profile = new Intent(MainScreen.this, MyProfile.class);
+                profile.putExtra("uid", OakappMain.THIS_USER);
+                startActivity(profile);
             }
         });
 
