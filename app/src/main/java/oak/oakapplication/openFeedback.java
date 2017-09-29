@@ -3,6 +3,7 @@ package oak.oakapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,13 +13,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class openFeedback extends AppCompatActivity {
 
-    public Feedback Fb;
-    public Feedback Tel;
-    public Feedback Mail;
+    private static final String TAG = "bicykel";
     private DatabaseReference mFb;
     private DatabaseReference mTel;
     private DatabaseReference mMail;
     private String cast;
+    public int fb_avg;
+    public int tel_avg;
+    public int mail_avg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class openFeedback extends AppCompatActivity {
         mFb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Fb = dataSnapshot.getValue(Feedback.class);
+                Feedback Fb = dataSnapshot.getValue(Feedback.class);
             }
 
             @Override
@@ -45,7 +47,7 @@ public class openFeedback extends AppCompatActivity {
         mTel.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Tel = dataSnapshot.getValue(Feedback.class);
+                Feedback Tel = dataSnapshot.getValue(Feedback.class);
             }
 
             @Override
@@ -56,13 +58,14 @@ public class openFeedback extends AppCompatActivity {
         mMail.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Mail = dataSnapshot.getValue(Feedback.class);
+                Feedback Mail = dataSnapshot.getValue(Feedback.class);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
 
     }
 

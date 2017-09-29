@@ -6,10 +6,15 @@ import android.location.Location;
 import com.facebook.FacebookSdk;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,7 +43,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class MainScreen extends AppCompatActivity {
+public class MainScreen extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
@@ -64,7 +70,6 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         main = ((OakappMain)getApplicationContext());
         if (OakappMain.HasInternetAcces() == false) {
@@ -123,7 +128,8 @@ public class MainScreen extends AppCompatActivity {
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())) //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -136,6 +142,10 @@ public class MainScreen extends AppCompatActivity {
                 AuthUI.getInstance().signOut(selfPointer);
             }
         });
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mMyProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,8 +194,8 @@ public class MainScreen extends AppCompatActivity {
                         public void UserListener(User u) {
                             OakappMain.user = u;
                             InitUser();
-                         }
-                    });
+                }
+            });
                 }
                 else {
                     RegisterUser();
@@ -281,5 +291,31 @@ public class MainScreen extends AppCompatActivity {
         startActivity(extraRegInfo);
 
 
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+
+        } else if (id == R.id.nav_kategorie) {
+
+        } else if (id == R.id.nav_feedbacky) {
+            Intent openFeedback = new Intent(selfPointer, Feedbacky.class);
+            startActivity(openFeedback);
+
+        } else if (id == R.id.nav_nastavenia) {
+
+        } else if (id == R.id.nav_logout) {
+            AuthUI.getInstance().signOut(selfPointer);
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

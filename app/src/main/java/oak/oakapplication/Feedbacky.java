@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-
 public class Feedbacky extends AppCompatActivity {
 
     public static Feedbacky selfPointer;
@@ -20,6 +19,7 @@ public class Feedbacky extends AppCompatActivity {
         setContentView(R.layout.activity_feedbacky);
 
         final String[] casti = getResources().getStringArray(R.array.mestske_casti);
+        final Intent openFeedback = new Intent(this, openFeedback.class);
 
         ListAdapter feedbAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, casti);
         ListView zoznam = (ListView) findViewById(R.id.lv_mest_casti);
@@ -29,9 +29,8 @@ public class Feedbacky extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(selfPointer, oak.oakapplication.openFeedback.class);
-                intent.putExtra("cast", casti[position]);
-                startActivity(intent);
+                openFeedback.putExtra("cast", casti[position]);
+                startActivity(openFeedback);
             }
         });
 
