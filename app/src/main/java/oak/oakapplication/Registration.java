@@ -59,6 +59,7 @@ public class Registration extends AppCompatActivity {
         mUsername = (EditText) findViewById(R.id.et_username);
         mUpload = (ProgressBar) findViewById(R.id.pb_profilePicture);
         mProfilePicture = (ImageView) findViewById(R.id.iv_profilePic);
+        mPhoto = null;
 
         mUpload.setMax(100);
 

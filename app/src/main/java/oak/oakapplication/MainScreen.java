@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -56,6 +57,7 @@ public class MainScreen extends AppCompatActivity {
 
     private Button mButtonSignOut;
     private Button mMyProfile;
+
 
 
     @Override
@@ -175,33 +177,39 @@ public class MainScreen extends AppCompatActivity {
 
     private void onSignedInInit() {
 
-        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
-                    OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
-                        @Override
-                        public void UserListener(User u) {
-                            OakappMain.user = u;
-                            InitUser();
-                         }
-                    });
+        if (! OakappMain.UserAlreadyExist) {
+            Log.i(TAG, "onSignInInit: Loading user from database");
+            mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
+                        OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
+                            @Override
+                            public void UserListener(User u) {
+                                OakappMain.user = u;
+                                InitUser();
+                            }
+                        });
+                    }
+                    else {
+                        RegisterUser();
+                    }
                 }
-                else {
-                    RegisterUser();
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "onSignInInit reading failed " + databaseError.getMessage());
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+            });
+        }
+        else {
+            Log.i(TAG, "onSignInInit: user already loaded");
+        }
     }
 
     private void onSignedOutCleanUp () {
         OakappMain.user.mUsername = "anonymous";
+        OakappMain.UserAlreadyExist = false;
         adapter.clear();
     }
 
@@ -237,7 +245,7 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //on error
+                Log.w(TAG, "Reading Posts from database failed " + databaseError.getMessage());
             }
 
         };
@@ -264,6 +272,7 @@ public class MainScreen extends AppCompatActivity {
         if (OakappMain.user.mAdmin)
             AdminSettings.Activate();
 
+        OakappMain.UserAlreadyExist = true;
         attachDatabaseReadListener();
     }
 
@@ -282,4 +291,8 @@ public class MainScreen extends AppCompatActivity {
 
 
     }
+
+    private static final String TAG = "MainScreen";
+
+
 }
