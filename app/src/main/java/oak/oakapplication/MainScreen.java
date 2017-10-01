@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -62,6 +63,7 @@ public class MainScreen extends AppCompatActivity
 
     private Button mButtonSignOut;
     private Button mMyProfile;
+
 
 
     @Override
@@ -128,8 +130,7 @@ public class MainScreen extends AppCompatActivity
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())) //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -144,8 +145,7 @@ public class MainScreen extends AppCompatActivity
         });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);;
 
         mMyProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,33 +185,39 @@ public class MainScreen extends AppCompatActivity
 
     private void onSignedInInit() {
 
-        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
-                    OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
-                        @Override
-                        public void UserListener(User u) {
-                            OakappMain.user = u;
-                            InitUser();
+        if (! OakappMain.UserAlreadyExist) {
+            Log.i(TAG, "onSignInInit: Loading user from database");
+            mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
+                        OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
+                            @Override
+                            public void UserListener(User u) {
+                                OakappMain.user = u;
+                                InitUser();
+                            }
+                        });
+                    }
+                    else {
+                        RegisterUser();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "onSignInInit reading failed " + databaseError.getMessage());
                 }
             });
-                }
-                else {
-                    RegisterUser();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        }
+        else {
+            Log.i(TAG, "onSignInInit: user already loaded");
+        }
     }
 
     private void onSignedOutCleanUp () {
         OakappMain.user.mUsername = "anonymous";
+        OakappMain.UserAlreadyExist = false;
         adapter.clear();
     }
 
@@ -247,7 +253,7 @@ public class MainScreen extends AppCompatActivity
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //on error
+                Log.w(TAG, "Reading Posts from database failed " + databaseError.getMessage());
             }
 
         };
@@ -274,6 +280,7 @@ public class MainScreen extends AppCompatActivity
         if (OakappMain.user.mAdmin)
             AdminSettings.Activate();
 
+        OakappMain.UserAlreadyExist = true;
         attachDatabaseReadListener();
     }
 
@@ -318,4 +325,8 @@ public class MainScreen extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private static final String TAG = "MainScreen";
+
+
 }

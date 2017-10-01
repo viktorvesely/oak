@@ -249,6 +249,7 @@ public class OakappMain extends Application {
     public static final int MAXRANKLEVEL = 30;
     public static final String NO_PICTURE = "no_pic";
     public static final String THIS_USER = "this";
+    public static boolean UserAlreadyExist = false;
 
 
     public static ArrayList<Long> rankBorders;

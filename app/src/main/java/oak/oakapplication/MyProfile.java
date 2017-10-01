@@ -1,9 +1,11 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -58,6 +60,9 @@ public class MyProfile extends AppCompatActivity {
 
         if (mInit) {InitView();}
 
+        if (OakappMain.user.mUniqueName.equals(mUser.mUniqueName) == false) {
+            mSavedPosts.setVisibility(View.GONE);
+        }
 
 
     }
@@ -68,7 +73,7 @@ public class MyProfile extends AppCompatActivity {
         mRank.setText(OakappMain.user.Rank());
         mReputation.setMax(100);
         mReputation.setProgress(OakappMain.user.mReputation / MAX_REPUTATION * 100);
-        Glide.with(mProfilePicture.getContext()).load(OakappMain.user.mPhoto).into(mProfilePicture);
+        Glide.with(mProfilePicture.getContext()).load(Uri.parse(OakappMain.user.mPhoto)).into(mProfilePicture);
 
         if(AdminSettings.wereActivated) {mJudgePower.setText(String.valueOf(mUser.mJudgePower));}
     }
