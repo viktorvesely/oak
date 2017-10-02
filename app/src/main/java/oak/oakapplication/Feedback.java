@@ -8,17 +8,20 @@ public class Feedback {
 
     public Feedback() {}
 
-    public Feedback(int t1_x, int t1_n, int t2_x, int t2_n, int t3_x, int t3_n){
-        this.mType1_n = t1_n;
-        this.mType1_x = t1_x;
-        this.mType2_n = t2_n;
-        this.mType2_x = t2_x;
-        this.mType3_n = t3_n;
-        this.mType3_x = t3_x;
+    public Feedback(int a, int b, int c, int d, int e, int f){
+        this.mType1_n = a;
+        this.mType1_x = b;
+        this.mType2_n = c;
+        this.mType2_x = d;
+        this.mType3_n = e;
+        this.mType3_x = f;
 
-        if ((t1_n+t2_n+t3_n)>0) {
-            mAvg = ((t1_x+t2_x+t3_x)/(t1_n+t2_n+t3_n));
+        if ((a+c+e)>0) {
+            this.mAvg = ((b+d+f)/(a+c+e));
+        }else{
+            this.mAvg = 0;
         }
+
     }
 
     public int mType1_n;

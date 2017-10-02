@@ -61,7 +61,7 @@
 
     <string-array name="mestske_casti">
         <item>"Staré Mesto"</item>
-        <item>"Ružinov"</item>
+        <item>"Ruzinov"</item>
         <item>"Vrakuňa"</item>
         <item>"Podunajské Biskupice"</item>
         <item>"Nové Mesto"</item>
@@ -80,6 +80,13 @@
         <item>"Magistrát hlavného mesta"</item>
         <item>"Rôzne"</item>
     </string-array>
+
+    <string-array name="komunikacia">
+        <item>"Facebook"</item>
+        <item>"Telefón"</item>
+        <item>"Mail"</item>
+    </string-array>
+
     <string name="title_activity_menu_activity">menu_activity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

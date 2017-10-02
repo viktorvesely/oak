@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <Spinner
-        android:id="@+id/spinner3"
+        android:id="@+id/sp_Cast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Spinner
-        android:id="@+id/spinner4"
+        android:id="@+id/sp_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -20,9 +21,11 @@
         android:text="TextView" />
 
     <RatingBar
-        android:id="@+id/ratingBar7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/rb_type1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:stepSize="1" />
 
     <TextView
         android:id="@+id/textView8"
@@ -31,9 +34,10 @@
         android:text="TextView" />
 
     <RatingBar
-        android:id="@+id/ratingBar8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/rb_type2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stepSize="1" />
 
     <TextView
         android:id="@+id/textView9"
@@ -42,9 +46,10 @@
         android:text="TextView" />
 
     <RatingBar
-        android:id="@+id/ratingBar9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/rb_type3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stepSize="1" />
 
     <TextView
         android:id="@+id/textView17"
@@ -66,8 +71,8 @@
         android:inputType="textMultiLine" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:id="@+id/b_feedback_ok"
+        android:layout_width="113dp"
         android:layout_height="wrap_content"
         android:text="Button" />
 </LinearLayout>

@@ -120,7 +120,7 @@ public class MainScreen extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 OakappMain.firebaseUser = firebaseAuth.getCurrentUser();
                 if (OakappMain.firebaseUser != null) {
-                onSignedInInit();
+//                onSignedInInit();
                 }
                 else {
                     onSignedOutCleanUp();
@@ -183,7 +183,7 @@ public class MainScreen extends AppCompatActivity
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
-    private void onSignedInInit() {
+/*    private void onSignedInInit() {
 
         if (! OakappMain.UserAlreadyExist) {
             Log.i(TAG, "onSignInInit: Loading user from database");
@@ -214,7 +214,7 @@ public class MainScreen extends AppCompatActivity
             Log.i(TAG, "onSignInInit: user already loaded");
         }
     }
-
+*/
     private void onSignedOutCleanUp () {
         OakappMain.user.mUsername = "anonymous";
         OakappMain.UserAlreadyExist = false;
