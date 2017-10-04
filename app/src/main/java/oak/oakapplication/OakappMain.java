@@ -196,6 +196,10 @@ public class OakappMain extends Application {
         FirebaseDatabase.getInstance().getReference().child("Posts").child(post.mKey).setValue(post);
     }
 
+    public static void SaveFeedbackComByKey(final FeedbackComment feedbackComment, String cast, String komunikacia) {
+        FirebaseDatabase.getInstance().getReference().child("Feedback").child(cast).child(komunikacia).child("Comments").child(feedbackComment.mKey).setValue(feedbackComment);
+    }
+
     public static void SaveCommentByKey(final Comment comment) {
         FirebaseDatabase.getInstance().getReference().child("Comments").child(comment.mKey).setValue(comment);
     }

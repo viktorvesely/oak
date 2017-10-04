@@ -1,6 +1,7 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +29,7 @@ public class Feedbacky extends AppCompatActivity {
         zoznam.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                openFeedback.putExtra("cast", casti[position]);
+                openFeedback.putExtra("cast", Integer.toString(position));
                 startActivity(openFeedback);
             }
         });

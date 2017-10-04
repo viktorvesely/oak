@@ -59,10 +59,12 @@ public class PostsActivity extends AppCompatActivity {
     private RatingBar mRB_1;
     private RatingBar mRB_2;
     private RatingBar mRB_3;
+    private EditText mFeedback_com;
 
     private int mType1=0;
     private int mType2=0;
     private int mType3=0;
+    private String feedback_com;
 
     private ArrayAdapter<String> casti;
     private ArrayAdapter<String> komunikacia;
@@ -149,6 +151,8 @@ public class PostsActivity extends AppCompatActivity {
                 komunikacia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mMediumSpinner.setAdapter(komunikacia);
 
+                mFeedback_com = (EditText) mView.findViewById(R.id.et_feeback_com);
+
                 mRB_1 = (RatingBar) mView.findViewById(R.id.rb_type1);
                 mRB_2 = (RatingBar) mView.findViewById(R.id.rb_type2);
                 mRB_3 = (RatingBar) mView.findViewById(R.id.rb_type3);
@@ -180,9 +184,10 @@ public class PostsActivity extends AppCompatActivity {
                 mFeedbackAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         feedbackRef = FirebaseDatabase.getInstance().getReference().child("Feedback")
-                                .child(casti.getItem( mCastSpinner.getSelectedItemPosition() ))
-                                .child(komunikacia.getItem( mMediumSpinner.getSelectedItemPosition()));
+                                .child(Integer.toString(mCastSpinner.getSelectedItemPosition()))
+                                .child(komunikacia.getItem(mMediumSpinner.getSelectedItemPosition()));
                         dialog.cancel();
                     }
                 });
@@ -230,8 +235,6 @@ public class PostsActivity extends AppCompatActivity {
                         longitude= addresses.get(0).getLongitude();
                 }
 
-
-
                 Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
@@ -241,15 +244,26 @@ public class PostsActivity extends AppCompatActivity {
                feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Feedback feedback = dataSnapshot.getValue(Feedback.class);
-                        feedback.mType1_x+=mType1;
-                        feedback.mType1_n++;
-                        feedback.mType2_x+=mType2;
-                        feedback.mType2_n++;
-                        feedback.mType3_x+=mType3;
-                        feedback.mType3_n++;
-                        System.out.println(feedback.mType1_x + feedback.mType1_n);
-                        //feedbackRef.setValue(feedback);
+
+                        if (dataSnapshot.hasChild("Ratings")) {
+                            Feedback feedback = dataSnapshot.child("Ratings").getValue(Feedback.class);
+                            feedback.mN++;
+                            feedback.mT_1+=mType1;
+                            feedback.mT_2+=mType2;
+                            feedback.mT_3+=mType3;
+                            feedbackRef.child("Ratings").setValue(feedback);
+                        } else {
+                            Feedback feedback = new Feedback(1, mType1, mType2, mType3);
+                            feedbackRef.child("Ratings").setValue(feedback);
+                        };
+
+                        if (!mPostText.getText().toString().isEmpty()) {
+                            FeedbackComment fb_com = new FeedbackComment(mFeedback_com.getText().toString(), OakappMain.firebaseUser.getUid());
+                            fb_com.mKey = feedbackRef.child("Comments").push().getKey();
+                            OakappMain.SaveFeedbackComByKey(fb_com, Integer.toString(mCastSpinner.getSelectedItemPosition()), komunikacia.getItem(mMediumSpinner.getSelectedItemPosition()));
+                        }
+
+
                     }
 
                     @Override

@@ -83,7 +83,7 @@
 
     <string-array name="komunikacia">
         <item>"Facebook"</item>
-        <item>"Telefón"</item>
+        <item>"Telefon"</item>
         <item>"Mail"</item>
     </string-array>
 

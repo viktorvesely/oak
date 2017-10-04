@@ -14,6 +14,11 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
+        <Spinner
+            android:id="@+id/sp_komunikacia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -21,10 +26,10 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/rb_t1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5" />
+            android:clickable="false" />
 
         <TextView
             android:id="@+id/textView2"
@@ -33,10 +38,9 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar2"
+            android:id="@+id/rb_t2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numStars="5" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView3"
@@ -45,10 +49,9 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar3"
+            android:id="@+id/rb_t3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numStars="5" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_com"
