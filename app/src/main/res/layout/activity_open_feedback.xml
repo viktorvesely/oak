@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context="oak.oakapplication.openFeedback">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <Spinner
+            android:id="@+id/sp_komunikacia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView"
@@ -18,9 +26,10 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/rb_t1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="false" />
 
         <TextView
             android:id="@+id/textView2"
@@ -29,7 +38,7 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar2"
+            android:id="@+id/rb_t2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -40,7 +49,7 @@
             android:text="TextView" />
 
         <RatingBar
-            android:id="@+id/ratingBar3"
+            android:id="@+id/rb_t3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

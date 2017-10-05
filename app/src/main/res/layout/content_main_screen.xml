@@ -36,12 +36,9 @@
 
     <Button
         android:id="@+id/b_myProfile"
-        android:layout_width="49dp"
-        android:layout_height="91dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="51dp"
+        android:layout_height="73dp"
         android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/b_signOut"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="295dp" />
+        tools:layout_editor_absoluteX="551dp"
+        tools:layout_editor_absoluteY="829dp" />
 </android.support.constraint.ConstraintLayout>
