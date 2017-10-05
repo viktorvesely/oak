@@ -187,7 +187,7 @@ public class PostsActivity extends AppCompatActivity {
 
                         feedbackRef = FirebaseDatabase.getInstance().getReference().child("Feedback")
                                 .child(Integer.toString(mCastSpinner.getSelectedItemPosition()))
-                                .child(komunikacia.getItem(mMediumSpinner.getSelectedItemPosition()));
+                                .child(Integer.toString(mMediumSpinner.getSelectedItemPosition()));
                         dialog.cancel();
                     }
                 });
@@ -203,7 +203,7 @@ public class PostsActivity extends AppCompatActivity {
                 List<Address> addresses = null;
                 double longitude = 0;
                 double latitude = 0;
-
+/*
                 String tags = mTags.getText().toString();
                 int numberOfTags = 1;
 
@@ -240,7 +240,7 @@ public class PostsActivity extends AppCompatActivity {
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
-
+*/
                feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -257,10 +257,10 @@ public class PostsActivity extends AppCompatActivity {
                             feedbackRef.child("Ratings").setValue(feedback);
                         };
 
-                        if (!mPostText.getText().toString().isEmpty()) {
+                        if (!mFeedback_com.getText().toString().isEmpty()) {
                             FeedbackComment fb_com = new FeedbackComment(mFeedback_com.getText().toString(), OakappMain.firebaseUser.getUid());
                             fb_com.mKey = feedbackRef.child("Comments").push().getKey();
-                            OakappMain.SaveFeedbackComByKey(fb_com, Integer.toString(mCastSpinner.getSelectedItemPosition()), komunikacia.getItem(mMediumSpinner.getSelectedItemPosition()));
+                            feedbackRef.child("Comments").child(fb_com.mKey).setValue(fb_com);
                         }
 
 
