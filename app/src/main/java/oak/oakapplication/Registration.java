@@ -1,11 +1,14 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 public class Registration extends AppCompatActivity {
 
@@ -149,4 +155,5 @@ public class Registration extends AppCompatActivity {
 
     private static int RC_SIGN_IN = 1;
     private static final int RC_PHOTO_PICKER =  2;
+    private static final String TAG = "Registration";
 }

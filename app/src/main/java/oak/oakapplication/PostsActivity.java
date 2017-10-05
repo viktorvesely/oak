@@ -140,7 +140,7 @@ public class PostsActivity extends AppCompatActivity {
                 String imgaddr1 = "";
                 String imgaddr2 = "";
                 if (mImgUrl1 != null) { imgaddr1 = mImgUrl1.toString();}
-                if (mImgUrl2 != null) { imgaddr2 = mAddImage2.toString();}
+                if (mImgUrl2 != null) { imgaddr2 = mImgUrl2.toString();}
                 if (mPostText.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_text), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
                 if (mTitle.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_title), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
 
@@ -162,6 +162,7 @@ public class PostsActivity extends AppCompatActivity {
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
+                finish();
             }
         });
 

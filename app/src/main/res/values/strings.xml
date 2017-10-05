@@ -31,14 +31,13 @@
     <string name="rank_level2">SuperSuperObcan</string>
     <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
-    <string name="Posts_et_text">Git</string>
-    <string name="Posts_et_title">Ma nema</string>
-    <string name="posts_tw_categories">rad</string>
-    <string name="Posts_b_addImg2">robim</string>
-    <string name="Posts_b_addImg1">to uz</string>
-    <string name="Posts_et_location">druhy krat</string>
-    <string name="Posts_et_tags">a</string>
-    <string name="Posts_b_post">tak</string>
+    <string name="Posts_et_text">Text</string>
+    <string name="Posts_et_title">Title</string>
+    <string name="Posts_b_addImg2">Img2</string>
+    <string name="Posts_b_addImg1">Img1</string>
+    <string name="Posts_et_location">Ulica</string>
+    <string name="Posts_et_tags">Tags</string>
+    <string name="Posts_b_post">Postni</string>
 
     <string name="ci_b_edit">edit</string>
     <string name="ci_b_plus">+?</string>
@@ -49,6 +48,7 @@
 
     <string name="createCom_et_TextDialog">Komentar</string>
     <string name="createCom_cb_dc">Priama sprava</string>
+    <string name="createCom_b_createComment">Komentuj</string>
 
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>

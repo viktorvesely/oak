@@ -104,7 +104,7 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent openPost = new Intent(selfPointer, oak.oakapplication.openPost.class);
+                Intent openPost = new Intent(MainScreen.this, oak.oakapplication.openPost.class);
                 openPost.putExtra("id",position);
                 startActivity(openPost);
             }

@@ -25,7 +25,6 @@ class CommentView{
     public TextView mOwner;
     public TextView mText;
     public TextView mTime;
-    public TextView mOwnerReputation; // this will change
     public TextView mUpvotes;
     public ImageView mPicture;
     public Button mPlus;
@@ -38,7 +37,6 @@ class CommentView{
         mOwner = (TextView) v.findViewById(R.id.tv_commentOwner);
         mText = (TextView) v.findViewById(R.id.tv_commentText);
         mTime = (TextView) v.findViewById(R.id.tv_timeSince);
-        mOwnerReputation = (TextView) v.findViewById(R.id.tv_ownerReputation);
         mPicture = (ImageView) v.findViewById(R.id.iv_ownerPicture);
         mPlus = (Button) v.findViewById(R.id.b_plus);
         mMinus = (Button) v.findViewById(R.id.b_minus);
@@ -65,6 +63,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
         switch (getItemViewType(position)){
             case COMMENT:
                 CommentView commentView = null;
+
+                if (comment.mDirectmsg && comment.mDirectTarget.equals(OakappMain.user.mUniqueName) || comment.mComOwner.equals(OakappMain.user.mUniqueName))
 
                 if (viewConverter == null) {
                     viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.comment_item, parent, false);
@@ -130,7 +130,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                         dialog.show();
                     }
                 });
-                commentView.mUpvotes.setText(comment.mUpvotes);
+                commentView.mUpvotes.setText(String.valueOf(comment.mUpvotes));
                 commentView.mOwner.setText(OakappMain.firebaseUser.getDisplayName());
                 commentView.mText.setText(comment.mComText);
                 commentView.mTime.setText(OakappMain.getTimeAgo(comment.mTimestamp));

@@ -8,14 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -34,20 +40,32 @@ public class openPost extends AppCompatActivity {
     private OakappMain main;
 
     private ListView listView_comments;
+    private TextView mText;
+    private TextView mTitle;
+    private ImageView mImg1;
+    private ImageView mImg2;
     private EditText mCommentAction;
+    private HorizontalScrollView mHSV_Images;
     private  EditText target;
+    private Button mEditPost;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_post);
 
+        mComments = new ArrayList<Comment>();
+        listView_comments = (ListView) findViewById(R.id.lv_commentsInPost);
         mCommentAction = (EditText) findViewById(R.id.et_comment);
+        mText = (TextView) findViewById(R.id.tv_openPostText);
+        mTitle = (TextView) findViewById(R.id.tv_openPostTitle);
+        mImg1 = (ImageView) findViewById(R.id.iv_openPostImg1);
+        mImg2 = (ImageView) findViewById(R.id.iv_openPostImg2);
+        mHSV_Images = (HorizontalScrollView) findViewById(R.id.hsv_postImages);
+
         adapter = new CommentArrayAdapter(this,mComments);
         listView_comments.setAdapter(adapter);
         main = (OakappMain) getApplicationContext();
-        mComments = null;
-        listView_comments = (ListView) findViewById(R.id.lv_commentsInPost);
         mPost = OakappMain.postsToShow.get(getIntent().getIntExtra("id", 0));
         OakappMain.getUserByUid(mPost.mOwner, new UserInterface() {
             @Override
@@ -57,13 +75,28 @@ public class openPost extends AppCompatActivity {
             }
         });
 
+        if (mPost.mImgUrl2.isEmpty()) {mImg2.setVisibility(View.GONE);}
+        else {
+            Glide.with(mImg2.getContext()).load(mPost.mImgUrl2).into(mImg2);
+        }
+        if (mPost.mImgUrl1.isEmpty()) {mImg1.setVisibility(View.GONE);}
+        else {
+            Glide.with(mImg1.getContext()).load(mPost.mImgUrl1).into(mImg1);
+        }
+        if (mPost.mImgUrl2.isEmpty() && mPost.mImgUrl1.isEmpty()) {mHSV_Images.setVisibility(View.GONE);}
+
+        mText.setText(mPost.mText);
+        mTitle.setText(mPost.mTitle);
+
+
         mCommentAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(openPost.this);
                 View view = getLayoutInflater().inflate(R.layout.dialog_box_create_comment,null);
-                EditText text = (EditText) view.findViewById(R.id.et_commentTextDialog);
-                CheckBox directMsg = (CheckBox) view.findViewById(R.id.cb_directComment);
+                final EditText text = (EditText) view.findViewById(R.id.et_commentTextDialog);
+                Button createComment = (Button) view.findViewById(R.id.b_createComment);
+                final CheckBox directMsg = (CheckBox) view.findViewById(R.id.cb_directComment);
                 target = (EditText) view.findViewById(R.id.et_targetName);
                 directMsg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -73,9 +106,30 @@ public class openPost extends AppCompatActivity {
                             isThisDirectMessage = true;
                         }
                         else {
-                            target.setVisibility(View.INVISIBLE);
+                            target.setVisibility(View.GONE);
                             isThisDirectMessage = false;
                         }
+                    }
+                });
+
+                createComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (text.getText().toString().isEmpty())
+                            return;
+                        if (isThisDirectMessage && target.getText().toString().isEmpty())
+                            return;
+                        String sTarget = "";
+                        if (! isThisDirectMessage)
+                            sTarget = "NONE";
+                        else sTarget = target.getText().toString();
+                        Comment c = new Comment(text.getText().toString(),mOwner.mUniqueName, mPost.mKey ,isThisDirectMessage, sTarget);
+                        c.mKey = FirebaseDatabase.getInstance().getReference().child("Comments").push().getKey();
+                        OakappMain.SaveCommentByKey(c);
+                        OakappMain.user.mOwnComments.add(c.mKey);
+                        OakappMain.SaveUserByUid(OakappMain.user);
+                        mPost.comments.add(c.mKey);
+                        OakappMain.SavePostByKey(mPost);
                     }
                 });
 

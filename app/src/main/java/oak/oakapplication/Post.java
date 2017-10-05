@@ -60,6 +60,16 @@ public class Post {
     //may change in future
     public List<String> comments;
 
+
+    public int numberOfImgs() {
+        int count = 0;
+        if (! mImgUrl1.isEmpty()) { count++;}
+
+        if (! mImgUrl2.isEmpty()) {count ++;}
+
+        return count;
+    }
+
     //static
     private static final int defaultRep = 0;
     private static final int headtstartPercentage = 5;

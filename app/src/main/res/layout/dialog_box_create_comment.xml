@@ -22,6 +22,14 @@
         android:checked="false"
         android:text="@string/createCom_cb_dc" />
 
+    <Button
+        android:id="@+id/b_createComment"
+        style="@android:style/Widget.DeviceDefault.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.30"
+        android:text="@string/createCom_b_createComment" />
+
     <EditText
         android:id="@+id/et_targetName"
         android:layout_width="match_parent"
@@ -29,7 +37,7 @@
         android:ems="10"
         android:hint="Specificke meno"
         android:inputType="textPersonName"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 
 </LinearLayout>
