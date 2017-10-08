@@ -86,8 +86,16 @@ public class openPost extends AppCompatActivity {
             }
         });
 
+        mEditPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         mEditPost.setVisibility(View.INVISIBLE);
         mEditPost.setEnabled(false);
+
 
         if (mPost.mImgUrl2.isEmpty()) {mImg2.setVisibility(View.GONE);}
         else {
