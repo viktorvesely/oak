@@ -25,7 +25,7 @@ public class Feedback {
 
     public int Avg () {
         if (mN>0) {
-            return (mT_1 + mT_2 + mT_3) / (mN * 15);
+            return (mT_1 + mT_2 + mT_3) / (mN);
         } else {
             return 0;
         }

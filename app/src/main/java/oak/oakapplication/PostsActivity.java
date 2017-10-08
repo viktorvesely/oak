@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -35,27 +40,34 @@ public class PostsActivity extends AppCompatActivity {
     private Geocoder geocoder;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPostPhotosreference;
+    private DatabaseReference feedbackRef;
 
     private OakappMain main;
     private Button mPostButton;
     private Button mAddImage1;
     private Button mAddImage2;
+    private Button mFeedbackButton;
+    private Button mFeedbackAdd;
     private EditText mTitle;
     private EditText mPostText;
     private EditText mTags;
     private EditText mAddress;
     private String[] mArraySpinner;
     private Spinner mCategories;
+    private Spinner mCastSpinner;
+    private Spinner mMediumSpinner;
+    private RatingBar mRB_1;
+    private RatingBar mRB_2;
+    private RatingBar mRB_3;
+    private EditText mFeedback_com;
 
-    private String mMedium;
-    private int mType1_n;
-    private int mType1_x;
-    private int mType2_n;
-    private int mType2_x;
-    private int mType3_n;
-    private int mType3_x;
+    private int mType1=0;
+    private int mType2=0;
+    private int mType3=0;
+    private String feedback_com;
 
-
+    private ArrayAdapter<String> casti;
+    private ArrayAdapter<String> komunikacia;
     private final static int MaxTagsPerPost = 3;
     private final String[] categories = {"Problemy","V procese", "Vyriesene"};
     private Uri mImgUrl1;
@@ -87,6 +99,7 @@ public class PostsActivity extends AppCompatActivity {
         mAddImage1 = (Button) findViewById(R.id.b_addImg1);
         mAddImage2 = (Button) findViewById(R.id.b_addImg2);
         mTags = (EditText) findViewById(R.id.et_tags);
+        mFeedbackButton = (Button) findViewById(R.id.b_addFeedback);
 
         mArraySpinner = categories;
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, mArraySpinner);
@@ -117,13 +130,80 @@ public class PostsActivity extends AppCompatActivity {
             }
         });
 
+        mFeedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(PostsActivity.this);
+
+                View mView = getLayoutInflater().inflate(R.layout.activity_new_feedback, null);
+                mBuilder.setTitle("Feedback");
+
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+
+                mCastSpinner = (Spinner) mView.findViewById(R.id.sp_Cast);
+                casti = new ArrayAdapter<String>(PostsActivity.this,android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.mestske_casti));
+                casti.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mCastSpinner.setAdapter(casti);
+
+                mMediumSpinner = (Spinner) mView.findViewById(R.id.sp_medium);
+                komunikacia = new ArrayAdapter<String>(PostsActivity.this,android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.komunikacia));
+                komunikacia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mMediumSpinner.setAdapter(komunikacia);
+
+                mFeedback_com = (EditText) mView.findViewById(R.id.et_feeback_com);
+
+                mRB_1 = (RatingBar) mView.findViewById(R.id.rb_type1);
+                mRB_2 = (RatingBar) mView.findViewById(R.id.rb_type2);
+                mRB_3 = (RatingBar) mView.findViewById(R.id.rb_type3);
+                mFeedbackAdd = (Button) mView.findViewById(R.id.b_feedback_ok);
+
+                mRB_1.setRating(mType1);
+                mRB_2.setRating(mType2);
+                mRB_3.setRating(mType3);
+
+                mRB_1.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        mType1 = (int)rating;
+                    }
+                });
+                mRB_2.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        mType2 = (int)rating;
+                    }
+                });
+                mRB_3.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        mType3 = (int)rating;
+                    }
+                });
+
+                mFeedbackAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        feedbackRef = FirebaseDatabase.getInstance().getReference().child("Feedback")
+                                .child(Integer.toString(mCastSpinner.getSelectedItemPosition()))
+                                .child(Integer.toString(mMediumSpinner.getSelectedItemPosition()));
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+            }
+
+        });
+
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<Address> addresses = null;
                 double longitude = 0;
                 double latitude = 0;
-
+/*
                 String tags = mTags.getText().toString();
                 int numberOfTags = 1;
 
@@ -140,7 +220,7 @@ public class PostsActivity extends AppCompatActivity {
                 String imgaddr1 = "";
                 String imgaddr2 = "";
                 if (mImgUrl1 != null) { imgaddr1 = mImgUrl1.toString();}
-                if (mImgUrl2 != null) { imgaddr2 = mImgUrl2.toString();}
+                if (mImgUrl2 != null) { imgaddr2 = mAddImage2.toString();}
                 if (mPostText.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_text), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
                 if (mTitle.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_title), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
 
@@ -155,14 +235,44 @@ public class PostsActivity extends AppCompatActivity {
                         longitude= addresses.get(0).getLongitude();
                 }
 
-
-
                 Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
-                finish();
+*/
+               feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild("Ratings")) {
+                            Feedback feedback = dataSnapshot.child("Ratings").getValue(Feedback.class);
+                            feedback.mN++;
+                            feedback.mT_1+=mType1;
+                            feedback.mT_2+=mType2;
+                            feedback.mT_3+=mType3;
+                            feedbackRef.child("Ratings").setValue(feedback);
+                        } else {
+                            Feedback feedback = new Feedback(1, mType1, mType2, mType3);
+                            feedbackRef.child("Ratings").setValue(feedback);
+                        };
+
+                        if (!mFeedback_com.getText().toString().isEmpty()) {
+                            FeedbackComment fb_com = new FeedbackComment(mFeedback_com.getText().toString(), OakappMain.firebaseUser.getUid());
+                            fb_com.mKey = feedbackRef.child("Comments").push().getKey();
+                            feedbackRef.child("Comments").child(fb_com.mKey).setValue(fb_com);
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
+
             }
         });
 
