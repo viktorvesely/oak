@@ -29,6 +29,9 @@ public class User {
         mOwnPosts = new ArrayList<String>();
         mOwnComments = new ArrayList<String>();
         mFavoritePosts = new ArrayList<String>();
+        mRatedComments = new ArrayList<String>();
+        mLikedPosts = new ArrayList<String>();
+        mDislikedComments = new ArrayList<String>();
         mUniqueName = "NONE";
         mUsername = "NONE";
         mReputation = 0;
@@ -50,6 +53,9 @@ public class User {
     public List<String> mOwnPosts;
     public List<String> mOwnComments;
     public List<String>mFavoritePosts;
+    public List<String>mLikedPosts;
+    public List<String>mRatedComments;
+    public List<String>mDislikedComments;
     public String mId;
     public long lastLogged;
 
@@ -69,6 +75,9 @@ public class User {
         mOwnPosts.add("INIT");
         mFavoritePosts.add("INIT");
         mOwnComments.add("INIT");
+        mRatedComments.add("INIT");
+        mLikedPosts.add("INIT");
+        mDislikedComments.add("INIT");
         mId = id;
         mJudgePower = 10;
         lastLogged = System.currentTimeMillis();

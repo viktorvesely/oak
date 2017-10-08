@@ -53,17 +53,13 @@ public class MainScreen extends AppCompatActivity
     private ChildEventListener mPostListener;
     private PostArrayAdapter adapter;
     private OakappMain main;
-    public static MainScreen selfPointer;
+    public  MainScreen selfPointer;
     private ListView mPostsListView;
     private FloatingActionButton fab;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
     private static int RC_SIGN_IN = 1;
-
-    private Button mButtonSignOut;
-    private Button mMyProfile;
-
 
 
     @Override
@@ -81,10 +77,8 @@ public class MainScreen extends AppCompatActivity
 
         //find views
 
-        mButtonSignOut = (Button) findViewById(R.id.b_signOut);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
-        mMyProfile = (Button) findViewById(R.id.b_myProfile);
 
         //Init
         selfPointer = this;
@@ -120,7 +114,7 @@ public class MainScreen extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 OakappMain.firebaseUser = firebaseAuth.getCurrentUser();
                 if (OakappMain.firebaseUser != null) {
-//                onSignedInInit();
+                    onSignedInInit();
                 }
                 else {
                     onSignedOutCleanUp();
@@ -137,24 +131,6 @@ public class MainScreen extends AppCompatActivity
             }
         };
 
-        mButtonSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AuthUI.getInstance().signOut(selfPointer);
-            }
-        });
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);;
-
-        mMyProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profile = new Intent(MainScreen.this, MyProfile.class);
-                profile.putExtra("uid", OakappMain.THIS_USER);
-                startActivity(profile);
-            }
-        });
 
     }
 
@@ -183,7 +159,7 @@ public class MainScreen extends AppCompatActivity
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
-/*    private void onSignedInInit() {
+    private void onSignedInInit() {
 
         if (! OakappMain.UserAlreadyExist) {
             Log.i(TAG, "onSignInInit: Loading user from database");
@@ -214,7 +190,7 @@ public class MainScreen extends AppCompatActivity
             Log.i(TAG, "onSignInInit: user already loaded");
         }
     }
-*/
+
     private void onSignedOutCleanUp () {
         OakappMain.user.mUsername = "anonymous";
         OakappMain.UserAlreadyExist = false;
@@ -306,19 +282,27 @@ public class MainScreen extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        switch (id) {
+            case R.id.nav_home:
+                break;
+            case R.id.nav_kategorie:
+                break;
+            case R.id.nav_feedbacky:
+                Intent openFeedback = new Intent(selfPointer, Feedbacky.class);
+                startActivity(openFeedback);
+                break;
+            case R.id.nav_nastavenia:
+                break;
+            case R.id.nav_logout:
+                AuthUI.getInstance().signOut(selfPointer);
+                break;
+            case R.id.nav_profile:
+                Intent profile = new Intent(MainScreen.this, MyProfile.class);
+                profile.putExtra("uid", OakappMain.THIS_USER);
+                startActivity(profile);
 
-        } else if (id == R.id.nav_kategorie) {
-
-        } else if (id == R.id.nav_feedbacky) {
-            Intent openFeedback = new Intent(selfPointer, Feedbacky.class);
-            startActivity(openFeedback);
-
-        } else if (id == R.id.nav_nastavenia) {
-
-        } else if (id == R.id.nav_logout) {
-            AuthUI.getInstance().signOut(selfPointer);
-
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

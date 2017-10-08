@@ -59,12 +59,14 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
     @Override
     public View getView(int position, View viewConverter, final ViewGroup parent) {
         Comment comment = getItem(position);
+        boolean readAble = true;
 
         switch (getItemViewType(position)){
             case COMMENT:
                 CommentView commentView = null;
 
-                if (comment.mDirectmsg && comment.mDirectTarget.equals(OakappMain.user.mUniqueName) || comment.mComOwner.equals(OakappMain.user.mUniqueName))
+                if (comment.mDirectmsg)
+                    readAble = comment.mDirectTarget.equals(OakappMain.user.mUniqueName) || comment.mComOwner.equals(OakappMain.user.mUniqueName);
 
                 if (viewConverter == null) {
                     viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.comment_item, parent, false);
@@ -75,7 +77,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 
                 else commentView = (CommentView) viewConverter.getTag();
 
-                if (OakappMain.firebaseUser.getUid().equals(comment.mComOwner)) {
+                if (OakappMain.user.mUniqueName.equals(comment.mComOwner)) {
                     commentView.mEditComment.setVisibility(View.VISIBLE);
                 }
                 else commentView.mEditComment.setVisibility(View.GONE);
@@ -88,8 +90,23 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                     public void onClick(View v) {
                         CommentView cv = (CommentView) v.getTag();
                         Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
-                        com.mUpvotes -= 1;
-                        OakappMain.SaveCommentByKey(com);
+                        if(! OakappMain.user.mDislikedComments.contains(com.mKey)) {
+                            OakappMain.user.mDislikedComments.add(com.mKey);
+                            com.mUpvotes -= 1;
+                            cv.mUpvotes.setText(String.valueOf(com.mUpvotes));
+                            OakappMain.SaveUserByUid(OakappMain.user);
+                            OakappMain.SaveCommentByKey(com);
+                        }
+                        else if (OakappMain.user.mRatedComments.contains(com.mKey))
+                        {
+                            OakappMain.user.mRatedComments.remove(com.mKey);
+                            OakappMain.user.mDislikedComments.add(com.mKey);
+                            com.mUpvotes -= 1;
+                            cv.mUpvotes.setText(String.valueOf(com.mUpvotes));
+                            OakappMain.SaveUserByUid(OakappMain.user);
+                            OakappMain.SaveCommentByKey(com);
+                        }
+
                     }
                 });
                 commentView.mPlus.setOnClickListener(new View.OnClickListener() {
@@ -97,21 +114,39 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                     public void onClick(View v) {
                         CommentView cv = (CommentView) v.getTag();
                         Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
-                        com.mUpvotes += 1;
-                        OakappMain.SaveCommentByKey(com);
+                        if(! OakappMain.user.mRatedComments.contains(com.mKey)) {
+                            OakappMain.user.mRatedComments.add(com.mKey);
+                            com.mUpvotes += 1;
+                            cv.mUpvotes.setText(String.valueOf(com.mUpvotes));
+                            OakappMain.SaveUserByUid(OakappMain.user);
+                            OakappMain.SaveCommentByKey(com);
+                        }
+                        else if (OakappMain.user.mDislikedComments.contains(com.mKey))
+                        {
+                            OakappMain.user.mDislikedComments.remove(com.mKey);
+                            OakappMain.user.mRatedComments.add(com.mKey);
+                            com.mUpvotes += 1;
+                            cv.mUpvotes.setText(String.valueOf(com.mUpvotes));
+                            OakappMain.SaveUserByUid(OakappMain.user);
+                            OakappMain.SaveCommentByKey(com);
+                        }
                     }
                 });
 
 
-                final View view =  LayoutInflater.from(getContext()).inflate(R.layout.dialog_box_create_comment,null);
-                AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-                builder.setView(view);
-                final AlertDialog dialog = builder.create();
+
+
                 commentView.mEditComment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        final View view =  LayoutInflater.from(getContext()).inflate(R.layout.dialog_box_create_comment,parent);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+                        builder.setView(view);
+                        final AlertDialog dialog = builder.create();
                         CommentView cv = (CommentView) v.getTag();
-                        Comment com = CommentArrayAdapter.this.getItem(cv.position) ;
+                        final Comment com = CommentArrayAdapter.this.getItem(cv.position);
+                        final EditText text = (EditText) view.findViewById(R.id.et_editCommentText);
+                        text.setText(com.mComText);
                         Button cancel = (Button) view.findViewById(R.id.b_cancel);
                         cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -123,7 +158,19 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                         confirm.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // checks and saving
+                                if (OakappMain.WordLimit(text.getText().toString(), 500, 5, "Text v komente", view)) {
+                                    com.mComText = text.getText().toString();
+                                    OakappMain.SaveCommentByKey(com);
+                                    dialog.hide();
+                                }
+                            }
+                        });
+                        Button delete = (Button) view.findViewById(R.id.b_editCommentDeleteComment);
+                        delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                com.mActive = false;
+
                             }
                         });
 
@@ -136,6 +183,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
                 commentView.mTime.setText(OakappMain.getTimeAgo(comment.mTimestamp));
                 break;
         }
+
+        if (! readAble) {viewConverter.setVisibility(View.GONE);}
 
         return viewConverter;
     }

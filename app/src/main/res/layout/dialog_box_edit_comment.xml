@@ -24,6 +24,14 @@
             android:text="@string/editCom_b_change" />
 
         <Button
+            android:id="@+id/b_editCommentDeleteComment"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/editCom_b_delete" />
+
+        <Button
             android:id="@+id/b_cancel"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"

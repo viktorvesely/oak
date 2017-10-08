@@ -38,6 +38,7 @@
     <string name="Posts_et_location">Ulica</string>
     <string name="Posts_et_tags">Tags</string>
     <string name="Posts_b_post">Postni</string>
+    <string name="posts_tw_categories">kategorie</string>
 
     <string name="ci_b_edit">edit</string>
     <string name="ci_b_plus">+?</string>
@@ -49,9 +50,11 @@
     <string name="createCom_et_TextDialog">Komentar</string>
     <string name="createCom_cb_dc">Priama sprava</string>
     <string name="createCom_b_createComment">Komentuj</string>
+    <string name="openPost_b_editPost">Uprav</string>
 
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>
+    <string name="editCom_b_delete">Zmaz</string>
 
     <string name="profile_tv_reputation">Rep</string>
     <string name="profile_b_savedPosts">Ulozene posty</string>
@@ -93,5 +96,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
 
 </resources>

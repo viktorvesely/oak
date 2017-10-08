@@ -6,7 +6,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.firebase.client.utilities.Base64;
 import com.google.android.gms.location.LocationListener;
@@ -167,6 +169,20 @@ public class OakappMain extends Application {
     }
 
 
+    public static boolean WordLimit(String text, int maxChar, int minChar, String object,  View v) {
+        object = String.valueOf(Character.toUpperCase(object.charAt(0))) + object.substring(1);
+        if (text.length() > maxChar) {
+            Snackbar.make(v, object +  " nemoze mat viac ako " + String.valueOf(maxChar) + " pismenok", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return  false;
+        }
+
+        if (text.length() < minChar) {
+            Snackbar.make(v, object +  " nemoze mat menej ako " + String.valueOf(minChar) + " pismenok", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return false;
+        }
+
+        return true;
+    }
 
     public static boolean HasInternetAcces() {
         Runtime runtime = Runtime.getRuntime();

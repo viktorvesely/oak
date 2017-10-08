@@ -1,6 +1,7 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +49,8 @@ public class openPost extends AppCompatActivity {
     private HorizontalScrollView mHSV_Images;
     private  EditText target;
     private Button mEditPost;
+    private ImageView mOwnerPicture;
+    private TextView mOwnerName;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -62,6 +65,9 @@ public class openPost extends AppCompatActivity {
         mImg1 = (ImageView) findViewById(R.id.iv_openPostImg1);
         mImg2 = (ImageView) findViewById(R.id.iv_openPostImg2);
         mHSV_Images = (HorizontalScrollView) findViewById(R.id.hsv_postImages);
+        mEditPost = (Button) findViewById(R.id.b_editPost);
+        mOwnerName = (TextView) findViewById(R.id.tv_postOwnerName);
+        mOwnerPicture = (ImageView) findViewById(R.id.iv_postOwner);
 
         adapter = new CommentArrayAdapter(this,mComments);
         listView_comments.setAdapter(adapter);
@@ -71,9 +77,17 @@ public class openPost extends AppCompatActivity {
             @Override
             public void UserListener(User u) {
                 mOwner = u;
-                //also draw him
+                if (mOwner.mUniqueName.equals(OakappMain.user.mUniqueName)) {
+                    mEditPost.setVisibility(View.VISIBLE);
+                    mEditPost.setEnabled(true);
+                }
+                mOwnerName.setText(mOwner.mUsername);
+                Glide.with(mOwnerPicture.getContext()).load(mOwner.mPhoto).into(mOwnerPicture);
             }
         });
+
+        mEditPost.setVisibility(View.INVISIBLE);
+        mEditPost.setEnabled(false);
 
         if (mPost.mImgUrl2.isEmpty()) {mImg2.setVisibility(View.GONE);}
         else {
@@ -112,6 +126,9 @@ public class openPost extends AppCompatActivity {
                     }
                 });
 
+                builder.setView(view);
+                final AlertDialog dialog = builder.create();
+
                 createComment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -130,11 +147,11 @@ public class openPost extends AppCompatActivity {
                         OakappMain.SaveUserByUid(OakappMain.user);
                         mPost.comments.add(c.mKey);
                         OakappMain.SavePostByKey(mPost);
+                        dialog.hide();
+
                     }
                 });
 
-                builder.setView(view);
-                AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
@@ -144,6 +161,8 @@ public class openPost extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Comment c =  dataSnapshot.getValue(Comment.class);
+                if (! c.mActive)
+                    return;
                 adapter.add(c);
                 if (mComments.size() == mPost.comments.size()) {
                     //mComments.sort(new CommentComparator()); also find out why the fuck it wont let me to

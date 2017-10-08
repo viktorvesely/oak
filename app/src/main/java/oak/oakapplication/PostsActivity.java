@@ -203,7 +203,7 @@ public class PostsActivity extends AppCompatActivity {
                 List<Address> addresses = null;
                 double longitude = 0;
                 double latitude = 0;
-/*
+
                 String tags = mTags.getText().toString();
                 int numberOfTags = 1;
 
@@ -240,7 +240,7 @@ public class PostsActivity extends AppCompatActivity {
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
-*/
+
                feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
