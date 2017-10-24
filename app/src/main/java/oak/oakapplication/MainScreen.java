@@ -256,6 +256,11 @@ public class MainScreen extends AppCompatActivity
         if (OakappMain.user.mAdmin)
             AdminSettings.Activate();
 
+        if (OakappMain.user.mFCMToken.isEmpty() || OakappMain.user.mFCMToken.equals("NONE")) {
+            OakappMain.user.mFCMToken = OakappMain.getToken();
+            OakappMain.SaveUserByUid(OakappMain.user);
+        }
+
         OakappMain.UserAlreadyExist = true;
         attachDatabaseReadListener();
     }
