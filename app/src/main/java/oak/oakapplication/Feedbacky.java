@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.firebase.ui.auth.AuthUI;
+
 public class Feedbacky extends AppCompatActivity {
 
     public static Feedbacky selfPointer;
@@ -34,6 +36,40 @@ public class Feedbacky extends AppCompatActivity {
             }
         });
 
+        ListView mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //OakappMain.OnMenuItemSelected(position, Feedbacky.this);
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent feedbacky = new Intent(Feedbacky.this, Feedbacky.class);
+                        startActivity(feedbacky);
+                        break;
+                    case 3:
+                        Intent intent = new Intent(Feedbacky.this, MyProfile.class);
+                        intent.putExtra("uid", OakappMain.THIS_USER);
+                        startActivity(intent);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        AuthUI.getInstance().signOut(Feedbacky.this);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 }

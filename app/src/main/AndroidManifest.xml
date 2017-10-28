@@ -28,10 +28,10 @@
         <activity android:name=".PostsActivity" />
         <activity android:name=".openPost" />
         <activity android:name=".Feedbacky" />
-        <activity android:name=".openFeedback"/>
+        <activity android:name=".openFeedback" />
         <activity android:name=".Registration" />
         <activity android:name=".Deactivate" />
-        <activity android:name=".MyProfile"></activity>
+        <activity android:name=".MyProfile" />
     </application>
 
 </manifest>

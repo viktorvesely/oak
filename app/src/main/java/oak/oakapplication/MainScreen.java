@@ -18,10 +18,12 @@ import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 
@@ -44,8 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class MainScreen extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainScreen extends AppCompatActivity{
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
@@ -56,6 +57,7 @@ public class MainScreen extends AppCompatActivity
     public  MainScreen selfPointer;
     private ListView mPostsListView;
     private FloatingActionButton fab;
+    private ListView mDrawerList;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
@@ -77,8 +79,43 @@ public class MainScreen extends AppCompatActivity
 
         //find views
 
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
+
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //OakappMain.OnMenuItemSelected(position, MainScreen.this);
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent intent = new Intent(MainScreen.this, Feedbacky.class);
+                        startActivity(intent);
+                        break;
+                    case 3:
+                        Intent mainscreen = new Intent(MainScreen.this, MyProfile.class);
+                        mainscreen.putExtra("uid", OakappMain.THIS_USER);
+                        startActivity(mainscreen);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        AuthUI.getInstance().signOut(MainScreen.this);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
 
         //Init
         selfPointer = this;
@@ -174,10 +211,10 @@ public class MainScreen extends AppCompatActivity
                                 InitUser();
                             }
                         });
-                    }
+                    }/*
                     else {
                         RegisterUser();
-                    }
+                    }*/
                 }
 
                 @Override
@@ -274,40 +311,6 @@ public class MainScreen extends AppCompatActivity
         startActivity(extraRegInfo);
 
 
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.nav_home:
-                break;
-            case R.id.nav_kategorie:
-                break;
-            case R.id.nav_feedbacky:
-                Intent openFeedback = new Intent(selfPointer, Feedbacky.class);
-                startActivity(openFeedback);
-                break;
-            case R.id.nav_nastavenia:
-                break;
-            case R.id.nav_logout:
-                AuthUI.getInstance().signOut(selfPointer);
-                break;
-            case R.id.nav_profile:
-                Intent profile = new Intent(MainScreen.this, MyProfile.class);
-                profile.putExtra("uid", OakappMain.THIS_USER);
-                startActivity(profile);
-
-            default:
-                break;
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     private static final String TAG = "MainScreen";

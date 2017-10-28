@@ -6,12 +6,17 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 
 public class MyProfile extends AppCompatActivity {
 
@@ -57,12 +62,48 @@ public class MyProfile extends AppCompatActivity {
         mSavedPosts = (Button) findViewById(R.id.b_savedPosts);
         mJudgePower = (TextView) findViewById(R.id.tv_judgePower);
 
+        ListView mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
 
         if (mInit) {InitView();}
 
         if (OakappMain.user.mUniqueName.equals(mUser.mUniqueName) == false) {
             mSavedPosts.setVisibility(View.GONE);
         }
+
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //OakappMain.OnMenuItemSelected(position, MyProfile.this);
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent feedbacky = new Intent(MyProfile.this, Feedbacky.class);
+                        startActivity(feedbacky);
+                        break;
+                    case 3:
+                        Intent intent = new Intent(MyProfile.this, MyProfile.class);
+                        intent.putExtra("uid", OakappMain.THIS_USER);
+                        startActivity(intent);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        AuthUI.getInstance().signOut(MyProfile.this);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
 
 
     }

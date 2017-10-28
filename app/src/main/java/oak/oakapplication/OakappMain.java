@@ -1,6 +1,8 @@
 package oak.oakapplication;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.firebase.client.utilities.Base64;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.LocationListener;
 import com.firebase.client.Firebase;
 import com.firebase.client.core.Context;
@@ -167,7 +170,32 @@ public class OakappMain extends Application {
             }
         });
     }
+    /*
+    public void OnMenuItemSelected(int position) {
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                Intent intent = new Intent(this , Feedbacky.class);
+                startActivity(intent);
+                break;
+            case 3:
+                Intent intent = new Intent(this , MyProfile.class);
+                intent.putExtra("uid", OakappMain.THIS_USER);
+                startActivity(intent);
+                break;
+            case 4:
+                break;
+            case 5:
+                AuthUI.getInstance().signOut(this);
+                break;
 
+            default:
+                break;
+        }
+    }*/
 
     public static boolean WordLimit(String text, int maxChar, int minChar, String object,  View v) {
         object = String.valueOf(Character.toUpperCase(object.charAt(0))) + object.substring(1);
