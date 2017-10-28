@@ -72,7 +72,8 @@ public class Registration extends AppCompatActivity {
         mContinue.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
-                                             if (mPhoto == null) {
+                                             if  (mPhoto == null) {
+
                                                  OakappMain.user.mPhoto = OakappMain.NO_PICTURE;
                                              }
                                              if (validator.validate(mUsername.getText().toString()) == false)
@@ -84,7 +85,8 @@ public class Registration extends AppCompatActivity {
                                                      Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.duplicate_name), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                                  }
                                                  else {
-                                                     OakappMain.user.mPhoto = mPhoto.toString();
+                                                     if (mPhoto != null)
+                                                        OakappMain.user.mPhoto = mPhoto.toString();
                                                      OakappMain.user.mUniqueName = mUsername.getText().toString();
                                                      int spacePos = -1;
                                                      for (int i = 0; i < OakappMain.user.mUniqueName.length(); ++i) {

@@ -1,6 +1,7 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.location.Location;
 import com.facebook.FacebookSdk;
@@ -41,6 +42,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,10 +77,8 @@ public class MainScreen extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         main = ((OakappMain)getApplicationContext());
-        if (OakappMain.HasInternetAcces() == false) {
-            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
-        }
+        HasInternet toGarbage = new HasInternet();
+        toGarbage.execute();
 
         //find views
 
@@ -211,10 +214,10 @@ public class MainScreen extends AppCompatActivity{
                                 InitUser();
                             }
                         });
-                    }/*
+                    }
                     else {
                         RegisterUser();
-                    }*/
+                    }
                 }
 
                 @Override
@@ -320,5 +323,28 @@ public class MainScreen extends AppCompatActivity{
 
     private static final String TAG = "MainScreen";
 
+
+    public class HasInternet extends AsyncTask<Void, Void, Boolean> {
+
+        protected Boolean doInBackground(Void ... v) {
+            try {
+                int timeoutMs = 1500;
+                Socket sock = new Socket();
+                SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+                sock.connect(sockaddr, timeoutMs);
+                sock.close();
+
+                return true;
+            } catch (IOException e) { return false; }
+        }
+
+
+        protected void onPostExecute(Boolean result) {
+            if (! result) {
+                Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        }
+    }
 
 }

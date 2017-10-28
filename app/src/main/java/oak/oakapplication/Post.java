@@ -35,6 +35,7 @@ public class Post {
         this.mLastActivity = System.currentTimeMillis();
         //init comments ?
         this.mActive = true;
+        this.mNotificationKey = "NONE";
     }
 
 
@@ -53,6 +54,7 @@ public class Post {
     public String mKey;
     //generated
     public int mReputation;
+    public String mNotificationKey;
     public long mTimestamp;
     public long mLastActivity;
     public boolean mActive;

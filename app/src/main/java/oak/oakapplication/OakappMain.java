@@ -1,5 +1,7 @@
 package oak.oakapplication;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -30,12 +32,22 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by viktor on 17.7.2017.
@@ -74,7 +86,6 @@ public class OakappMain extends Application {
 
 
     }
-
 
 
     static String  getRankFromLevel(int level)  {
@@ -135,6 +146,15 @@ public class OakappMain extends Application {
 
     }
 
+    public static String getAccount(android.content.Context c) {
+        Account[] accounts = AccountManager.get(c).
+                getAccountsByType("com.google");
+        if (accounts.length == 0) {
+            return null;
+        }
+        return accounts[0].name;
+    }
+
     public static void getPostByKey(final String id, final PostListener listener)
     {
         Query filter = FirebaseDatabase.getInstance().getReference().child("Posts").orderByChild("mKey").equalTo(id);
@@ -152,6 +172,76 @@ public class OakappMain extends Application {
             }
         });
 ;    }
+
+    public static String createGroup(String senderId, String groupId, String registrationId, String apiKey)
+            throws IOException, JSONException {
+        URL url = new URL("https://android.googleapis.com/gcm/notification");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(true);
+
+        // HTTP request header
+        con.setRequestProperty("project_id", senderId);
+        con.setRequestProperty("Authorization", "key=" + apiKey);
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestMethod("POST");
+        con.connect();
+
+        // HTTP request
+        JSONObject data = new JSONObject();
+        data.put("operation", "create");
+        data.put("notification_key_name", groupId);
+        data.put("registration_ids", new JSONArray(Arrays.asList(registrationId)));
+
+        OutputStream os = con.getOutputStream();
+        os.write(data.toString().getBytes("UTF-8"));
+        os.close();
+
+        // Read the response into a string
+        InputStream is = con.getInputStream();
+        String responseString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+        is.close();
+
+        // Parse the JSON string and return the notification key
+        JSONObject response = new JSONObject(responseString);
+        return response.getString("notification_key");
+
+    }
+
+    public static String addToGroup(String senderId, String userEmail, String registrationId, String idToken)
+            throws IOException, JSONException {
+        URL url = new URL("https://android.googleapis.com/gcm/googlenotification");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(true);
+
+        // HTTP request header
+        con.setRequestProperty("project_id", senderId);
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestMethod("POST");
+        con.connect();
+
+        // HTTP request
+        JSONObject data = new JSONObject();
+        data.put("operation", "add");
+        data.put("notification_key_name", userEmail);
+        data.put("registration_ids", new JSONArray(Arrays.asList(registrationId)));
+        data.put("id_token", idToken);
+
+        OutputStream os = con.getOutputStream();
+        os.write(data.toString().getBytes("UTF-8"));
+        os.close();
+
+        // Read the response into a string
+        InputStream is = con.getInputStream();
+        String responseString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+        is.close();
+
+        // Parse the JSON string and return the notification key
+        JSONObject response = new JSONObject(responseString);
+        return response.getString("notification_key");
+
+    }
 
     public static void getCommentByKey(final String id, final CommentListener listener)
     {
@@ -171,31 +261,7 @@ public class OakappMain extends Application {
         });
     }
 
-    public void OnMenuItemSelected(int position) {
-        switch (position) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                Intent intent = new Intent(this , Feedbacky.class);
-                startActivity(intent);
-                break;
-            case 3:
-                Intent intent = new Intent(this , MyProfile.class);
-                intent.putExtra("uid", OakappMain.THIS_USER);
-                startActivity(intent);
-                break;
-            case 4:
-                break;
-            case 5:
-                AuthUI.getInstance().signOut(this);
-                break;
 
-            default:
-                break;
-        }
-    }
 
     public static String getToken() {
         return FirebaseInstanceId.getInstance().getToken();
@@ -216,26 +282,6 @@ public class OakappMain extends Application {
         }
 
         return true;
-    }
-
-    public static boolean HasInternetAcces() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -W 1 -c 2 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            BufferedReader stdInput = new BufferedReader(new
-                    InputStreamReader(ipProcess.getInputStream()));
-
-            String s;
-            while ((s = stdInput.readLine()) != null) {
-                System.out.println(s);
-            }
-            return (exitValue == 0);
-        }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-
-        return false;
     }
 
     public static void SaveUserByUid(final User user) {

@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.NetworkOnMainThreadException;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 
 import com.firebase.client.Firebase;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,10 +31,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.List;
 import java.util.Locale;
 
+import static com.google.firebase.crash.FirebaseCrash.log;
 import static java.lang.Math.toIntExact;
 
 public class PostsActivity extends AppCompatActivity {
@@ -235,13 +245,15 @@ public class PostsActivity extends AppCompatActivity {
                         longitude= addresses.get(0).getLongitude();
                 }
 
+
+
                 Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
-
-               feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                new HTTPrequest().execute(post);
+                feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -278,6 +290,7 @@ public class PostsActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
@@ -301,4 +314,41 @@ public class PostsActivity extends AppCompatActivity {
             });
         }
     }
+
+
+    public class HTTPrequest extends AsyncTask<Post, Void, String> {
+
+        private Post mCurrentPost;
+
+        protected String doInBackground(Post...p) {
+
+            String accountName = OakappMain.getAccount(getApplicationContext());
+            String idToken = null;
+            try {
+                idToken = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scope);
+            } catch (Exception e) {
+                log("exception while getting idToken: " + e);
+            }
+
+            String notificationKey = null;
+            try {
+                 notificationKey = OakappMain.createGroup(getString(R.string.sender_id), p[0].mKey, idToken , getString(R.string.api_key));
+            } catch (IOException | JSONException | NetworkOnMainThreadException error) {
+                Log.e(TAG, "Error while creating Group: " + error.getMessage());
+            }
+
+            mCurrentPost = p[0];
+            return notificationKey;
+        }
+
+
+        protected void onPostExecute(String result) {
+            mCurrentPost.mNotificationKey = result;
+            OakappMain.SavePostByKey(mCurrentPost);
+        }
+    }
+
+    private final String scope = "audience:server:client_id:"
+            + "1262xxx48712-9qs6n32447mcj9dirtnkyrejt82saa52.apps.googleusercontent.com";
+    private final String TAG = "CreatePost";
 }

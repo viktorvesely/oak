@@ -2,13 +2,15 @@
     <string name="app_name">Oakapplication</string>
     <string name="title_activity_main_screen">MainScreen</string>
     <string name="facebook_app_id">1916678708584576</string>
+    <string name="sender_id">305148276044</string>
+    <string name="api_key">AIzaSyBlMs38H5nB-uHm1xBMQ3k6HaD4b_meXN0</string>
 
     <string name="min_tags">Aspon jeden tag</string>
     <string name="max_tags">Maximalne 4 tagy</string>
     <string name="no_title">Musis zadat nadpis</string>
     <string name="no_text">Musis napisat nejaky text do postu</string>
     <string name="complete_action">Dokonci akciu s</string>
-    <string name="no_internet_connection">Nemas pripojenie k internetu</string>
+    <string name="no_internet_connection">Doporucujeme internet na spravne pouzivanie nasej aplikacie</string>
     <string name="no_address_found">Nenasla sa zaidna adresa</string>
     <string name="you_wasnt_there">je nam luto ze si nebol aktivny teraz nemas rep za to</string>
     <string name="just_now">prave teraz</string>
