@@ -40,11 +40,13 @@ public class User {
         mAdmin = false;
         mPhoto = "NONE";
         mId = "NONE";
+        mFCMToken = "NONE";
         lastLogged = 0;
     }
 
     public String mUsername;
     public String mUniqueName;
+    public String mFCMToken;
     public int mReputation;
     public long mJudgePower;
     public boolean mActive;
