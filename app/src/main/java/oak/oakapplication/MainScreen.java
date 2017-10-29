@@ -58,8 +58,6 @@ public class MainScreen extends AppCompatActivity{
     private DatabaseReference mUserRef;
     private ChildEventListener mPostListener;
     private PostArrayAdapter adapter;
-    private OakappMain main;
-    public  MainScreen selfPointer;
     private ListView mPostsListView;
     private FloatingActionButton fab;
     private ListView mDrawerList;
@@ -76,7 +74,6 @@ public class MainScreen extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        main = ((OakappMain)getApplicationContext());
         HasInternet toGarbage = new HasInternet();
         toGarbage.execute();
 
@@ -95,24 +92,39 @@ public class MainScreen extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //OakappMain.OnMenuItemSelected(position, MainScreen.this);
                 switch (position) {
-                    case 0:
+                    case MenuOptions.HOME:
+                        closeOptionsMenu(); //idk if this works
                         break;
-                    case 1:
+
+                    case MenuOptions.ADMIN:
+                        Intent admin = new Intent(MainScreen.this, AdminFunctions.class);
+                        startActivity(admin);
                         break;
-                    case 2:
+
+                    case MenuOptions.CATEGORY:
+                        break;
+
+                    case MenuOptions.SETTINGS:
+                        break;
+
+                    case MenuOptions.TIPS:
+                        Intent tips = new Intent(MainScreen.this, Tips.class);
+                        startActivity(tips);
+                        break;
+
+                    case MenuOptions.FEEDBACKS:
                         Intent intent = new Intent(MainScreen.this, Feedbacky.class);
                         startActivity(intent);
                         break;
-                    case 3:
+                    case MenuOptions.PROFILE:
                         Intent mainscreen = new Intent(MainScreen.this, MyProfile.class);
                         mainscreen.putExtra("uid", OakappMain.THIS_USER);
                         startActivity(mainscreen);
                         break;
-                    case 4:
-                        break;
-                    case 5:
+                    case MenuOptions.SIGNOUT:
                         AuthUI.getInstance().signOut(MainScreen.this);
                         break;
+
 
                     default:
                         break;
@@ -121,7 +133,6 @@ public class MainScreen extends AppCompatActivity{
         });
 
         //Init
-        selfPointer = this;
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mPostRef = mRootRef.child("Posts");
         mUserRef = mRootRef.child("Users");
@@ -134,7 +145,7 @@ public class MainScreen extends AppCompatActivity{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newPost = new Intent(selfPointer, PostsActivity.class);
+                Intent newPost = new Intent(getApplicationContext(), PostsActivity.class);
                 startActivity(newPost);
             }
         });
@@ -345,6 +356,17 @@ public class MainScreen extends AppCompatActivity{
                 Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         }
+    }
+
+    private static class MenuOptions {
+        public static final int HOME = 0;
+        public static final int CATEGORY = 1;
+        public static final int FEEDBACKS = 2;
+        public static final int PROFILE = 3;
+        public static final int SETTINGS = 4;
+        public static final int SIGNOUT = 5;
+        public static final int ADMIN = 6;
+        public static final int TIPS = 7;
     }
 
 }

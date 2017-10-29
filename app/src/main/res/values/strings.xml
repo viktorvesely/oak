@@ -93,6 +93,8 @@
         <item>Profil</item>
         <item>Nastavenia</item>
         <item>Odhlásiť sa</item>
+        <item>Admin funkcie</item>
+        <item>Tipy</item>
     </string-array>
 
     <string-array name="komunikacia">

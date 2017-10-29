@@ -58,7 +58,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".AdminFunctions"></activity>
+        <activity android:name=".AdminFunctions" />
+        <activity android:name=".Tips"></activity>
     </application>
 
 </manifest>
