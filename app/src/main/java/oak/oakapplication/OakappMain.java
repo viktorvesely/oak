@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.firebase.client.utilities.Base64;
@@ -180,11 +181,15 @@ public class OakappMain extends Application {
         con.setDoOutput(true);
 
         // HTTP request header
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Authorization", apiKey);
         con.setRequestProperty("project_id", senderId);
+
+        /*con.setRequestProperty("project_id", senderId);
         con.setRequestProperty("Authorization", "key=" + apiKey);
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
-        con.setRequestMethod("POST");
+        con.setRequestMethod("POST"); */
         con.connect();
 
         // HTTP request
@@ -198,6 +203,8 @@ public class OakappMain extends Application {
         os.close();
 
         // Read the response into a string
+        Log.i(TAG, "Response code: " + con.getResponseCode());
+        // Log.i(TAG, "ErrorStream: " + con.getErrorStream());
         InputStream is = con.getInputStream();
         String responseString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
         is.close();
@@ -353,4 +360,5 @@ public class OakappMain extends Application {
 
 
     public static ArrayList<Long> rankBorders;
+    private static String TAG = "MAIN";
 }
