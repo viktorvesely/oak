@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ public class Tips extends AppCompatActivity {
 
     private int mCurrentPosition;
     private GestureDetector mGestureDetector;
-    private final float MINDELTATOSWIPE = 250;
+    private final float MINDELTATOSWIPE = 260;
 
 
     @Override
@@ -53,7 +55,7 @@ public class Tips extends AppCompatActivity {
         mCurrentPosition = 0;
 
         mJsonTips = new Gson().fromJson(mJson, JsonTips.class);
-        adapter = new TipsAdapter(mJsonTips.mTips);
+        adapter = new TipsAdapter(mJsonTips.mTips, this);
         SpeedSwipe speedSwipe = new SpeedSwipe();
         mGestureDetector = new GestureDetector(this, speedSwipe);
 
@@ -100,9 +102,13 @@ public class Tips extends AppCompatActivity {
 
     private class TipsAdapter extends RecyclerView.Adapter<TipsAdapter.TipView> {
         private ArrayList<JsonTips.JsonTip> mTips;
+        private int mLastPosition;
+        private Context mContext;
 
-        public TipsAdapter (ArrayList<JsonTips.JsonTip> tips) {
+        public TipsAdapter (ArrayList<JsonTips.JsonTip> tips, Context context) {
             mTips = tips;
+            mLastPosition = -1;
+            mContext = context;
         }
 
 
@@ -123,13 +129,27 @@ public class Tips extends AppCompatActivity {
             // set the view's size, margins, paddings and layout parameters
             TipView tv = new TipView(v);
 
+
+
             return tv;
         }
 
         @Override
         public void onBindViewHolder(TipView holder, int position) {
 
+            int currentPos = holder.getAdapterPosition();
+
             holder.mText.setText(mTips.get(position).mText);
+            if (currentPos > mLastPosition) {
+                Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.from_right_to_left);
+                holder.itemView.startAnimation(animation);
+                mLastPosition = currentPos;
+            }
+            else if (currentPos < mLastPosition) {
+                Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.from_left_to_right);
+                holder.itemView.startAnimation(animation);
+                mLastPosition = currentPos;
+            }
 
         }
 
