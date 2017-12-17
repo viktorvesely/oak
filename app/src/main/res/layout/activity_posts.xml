@@ -6,122 +6,138 @@
     android:layout_height="match_parent"
     tools:context="oak.oakapplication.PostsActivity">
 
-    <EditText
-        android:id="@+id/et_postText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/Posts_et_text"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/b_post"
-        android:layout_width="237dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/Posts_b_post"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/b_addImg1"
-        app:layout_constraintVertical_bias="0.965" />
+        <EditText
+            android:id="@+id/et_postText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/Posts_et_text"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/b_addImg1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-48dp"
-        android:text="@string/Posts_b_addImg1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/b_addImg2" />
+        <Button
+            android:id="@+id/b_addFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-48dp"
+            android:layout_weight="1"
+            android:text="Feedback"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_tags" />
 
-    <Button
-        android:id="@+id/b_addImg2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        android:text="@string/Posts_b_addImg2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_categories" />
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/Posts_et_title"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_postText" />
 
-    <Spinner
-        android:id="@+id/sp_categories"
-        android:layout_width="316dp"
-        android:layout_height="266dp"
-        android:layout_marginTop="15dp"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <EditText
+            android:id="@+id/et_location"
+            android:layout_width="227dp"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/Posts_et_location"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/b_addImg1" />
 
-    <TextView
-        android:id="@+id/tw_categories"
-        android:layout_width="228dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="48dp"
-        android:text="@string/posts_tw_categories"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_postText" />
+        <EditText
+            android:id="@+id/et_tags"
+            android:layout_width="225dp"
+            android:layout_height="38dp"
+            android:layout_marginBottom="60dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/Posts_et_tags"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/b_post"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
-    <EditText
-        android:id="@+id/et_tags"
-        android:layout_width="225dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="60dp"
-        android:ems="10"
-        android:hint="@string/Posts_et_tags"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/b_post"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <TextView
+            android:id="@+id/tw_categories"
+            android:layout_width="226dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="48dp"
+            android:layout_weight="1"
+            android:text="@string/posts_tw_categories"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_postText" />
 
-    <EditText
-        android:id="@+id/et_location"
-        android:layout_width="227dp"
-        android:layout_height="39dp"
-        android:ems="10"
-        android:hint="@string/Posts_et_location"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/b_addImg1"/>
+        <Spinner
+            android:id="@+id/sp_categories"
+            android:layout_width="232dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_editor_absoluteY="105dp" />
 
-    <EditText
-        android:id="@+id/et_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:ems="10"
-        android:hint="@string/Posts_et_title"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_postText" />
+        <Button
+            android:id="@+id/b_addImg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-48dp"
+            android:layout_weight="1"
+            android:text="@string/Posts_b_addImg1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/b_addImg2" />
 
-    <Button
-        android:id="@+id/b_addFeedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-48dp"
-        android:text="Feedback"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_tags" />
+        <Button
+            android:id="@+id/b_addImg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:layout_weight="1"
+            android:text="@string/Posts_b_addImg2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_categories" />
+
+        <Button
+            android:id="@+id/b_post"
+            android:layout_width="237dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/Posts_b_post"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/b_addImg1"
+            app:layout_constraintVertical_bias="0.965" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
