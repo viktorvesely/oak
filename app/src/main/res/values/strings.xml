@@ -29,6 +29,8 @@
     <string name="duplicate_name">Uz ta niekto predbehol</string>
     <string name="upload_success">Obrazok uploadnuty</string>
     <string name="upload_in_progress">Obrazok este nie je uploadnuty</string>
+    <string name="rb_problems">Problemy</string>
+    <string name="rb_solved">Vyriesene</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>

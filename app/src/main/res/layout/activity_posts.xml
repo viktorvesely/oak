@@ -65,44 +65,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/b_addImg1" />
 
-        <EditText
-            android:id="@+id/et_tags"
-            android:layout_width="225dp"
-            android:layout_height="38dp"
-            android:layout_marginBottom="60dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/Posts_et_tags"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/b_post"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <TextView
-            android:id="@+id/tw_categories"
-            android:layout_width="226dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="48dp"
-            android:layout_weight="1"
-            android:text="@string/posts_tw_categories"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_postText" />
-
-        <Spinner
-            android:id="@+id/sp_categories"
-            android:layout_width="232dp"
-            android:layout_height="42dp"
-            android:layout_weight="1"
-            android:visibility="visible"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="105dp" />
-
         <Button
             android:id="@+id/b_addImg1"
             android:layout_width="wrap_content"

@@ -1,18 +1,23 @@
 package oak.oakapplication;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 import oak.oakapplication.Post;
 
@@ -46,11 +51,13 @@ class ImgView
 }
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
-    public PostArrayAdapter (Context context, ArrayList<Post> posts) {
+    public PostArrayAdapter (Context context, ArrayList<Post> posts, int filter) {
         super(context,0, posts);
         mPosts = posts;
+        mFilter = filter;
     }
 
+    private int mFilter;
     private ArrayList<Post> mPosts;
     private static final int NO_IMG_VIEW = 0;
     private static final int IMG_VIEW = 1;
@@ -60,6 +67,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Post post = getItem(position);
+        if (post == null || mFilter == post.mCategory) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.empty, parent, false);
+        }
 
         int viewType = getItemViewType(position);
 
@@ -102,6 +112,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
 
         }
+        if (post.mCategory == 0 && post.mIsWorkedOn) {
+            convertView.setBackgroundColor(Color.parseColor("#2c65c1"));
+        }
+        else if (post.mCategory == 0) {
+            convertView.setBackgroundColor(Color.parseColor("#0f9b18"));
+        }
 
 
         return convertView;
@@ -118,6 +134,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
             return NO_IMG_VIEW;
         else return IMG_VIEW;
     }
+
+
 
 }
 

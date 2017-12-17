@@ -60,9 +60,7 @@ public class PostsActivity extends AppCompatActivity {
     private Button mFeedbackAdd;
     private EditText mTitle;
     private EditText mPostText;
-    private EditText mTags;
     private EditText mAddress;
-    private String[] mArraySpinner;
     private Spinner mCastSpinner;
     private Spinner mMediumSpinner;
     private RatingBar mRB_1;
@@ -107,7 +105,6 @@ public class PostsActivity extends AppCompatActivity {
         mAddress = (EditText) findViewById(R.id.et_location);
         mAddImage1 = (Button) findViewById(R.id.b_addImg1);
         mAddImage2 = (Button) findViewById(R.id.b_addImg2);
-        mTags = (EditText) findViewById(R.id.et_tags);
         mFeedbackButton = (Button) findViewById(R.id.b_addFeedback);
 
 
@@ -216,19 +213,6 @@ public class PostsActivity extends AppCompatActivity {
                 double longitude = 0;
                 double latitude = 0;
 
-                String tags = mTags.getText().toString();
-                int numberOfTags = 1;
-
-                if (tags.isEmpty()) { Snackbar.make(v, getString(R.string.min_tags), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
-
-                for (int i = 0; i < tags.length(); ++i)
-                {
-                    if (tags.charAt(i) == ','){
-                        numberOfTags++;
-                    }
-                }
-
-                if (numberOfTags > MaxTagsPerPost) { Snackbar.make(v, getString(R.string.max_tags), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
                 String imgaddr1 = "";
                 String imgaddr2 = "";
                 if (mImgUrl1 != null) { imgaddr1 = mImgUrl1.toString();}
@@ -249,11 +233,15 @@ public class PostsActivity extends AppCompatActivity {
 
 
 
-                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),0, latitude, longitude,true);
+                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, 0, latitude, longitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
+                Problem problem = new Problem(post.mKey);
+                problem.addWorker("INIT");
+                problem.save();
+
                 new HTTPrequest().execute(post);
                 if (feedbackRef != null) {
 

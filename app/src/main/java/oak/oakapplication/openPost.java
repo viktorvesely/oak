@@ -154,6 +154,7 @@ public class openPost extends AppCompatActivity {
                         OakappMain.user.mOwnComments.add(c.mKey);
                         OakappMain.SaveUserByUid(OakappMain.user);
                         mPost.comments.add(c.mKey);
+                        mPost.mLastActivity = System.currentTimeMillis();
                         OakappMain.SavePostByKey(mPost);
                         dialog.hide();
 

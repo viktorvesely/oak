@@ -16,8 +16,7 @@ public class Post {
         this.comments.add("INIT");
     }
 
-    public Post (String postText, String title ,String ownerOfPost, String ImgURL, String ImgURL2,
-                 String Tags, long Category, double Latitude, double Longitude, boolean wasCreated) {
+    public Post (String postText, String title ,String ownerOfPost, String ImgURL, String ImgURL2, long Category, double Latitude, double Longitude, boolean wasCreated) {
         this.comments = new ArrayList<String>();
         this.comments.add("INIT");
         this.mText = postText;
@@ -25,7 +24,6 @@ public class Post {
         this.mOwner = ownerOfPost;
         this.mImgUrl1 = ImgURL;
         this.mImgUrl2 = ImgURL2;
-        this.mTags = Tags;
         this.mCategory = Category;
         this.mLatitude = Latitude;
         this.mLongitude = Longitude;
@@ -36,6 +34,7 @@ public class Post {
         //init comments ?
         this.mActive = true;
         this.mNotificationKey = "NONE";
+        this.mIsWorkedOn = false;
     }
 
 
@@ -47,7 +46,6 @@ public class Post {
     public String mOwner;
     public String mImgUrl1;
     public String mImgUrl2;
-    public String mTags;
     public long mCategory;
     public double mLatitude;
     public double mLongitude;
@@ -58,6 +56,7 @@ public class Post {
     public long mTimestamp;
     public long mLastActivity;
     public boolean mActive;
+    public boolean mIsWorkedOn;
 
     //may change in future
     public List<String> comments;
