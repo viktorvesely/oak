@@ -27,6 +27,8 @@
     <string name="no_photo_selected">Musis si zvolit fotku</string>
     <string name="bad_username">Prezyvka musi byt: dlshia ako 4, nensia ako 15 a nesmie obsahovat specialne znaky</string>
     <string name="duplicate_name">Uz ta niekto predbehol</string>
+    <string name="upload_success">Obrazok uploadnuty</string>
+    <string name="upload_in_progress">Obrazok este nie je uploadnuty</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>

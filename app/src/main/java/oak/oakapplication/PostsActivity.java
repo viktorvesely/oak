@@ -63,13 +63,13 @@ public class PostsActivity extends AppCompatActivity {
     private EditText mTags;
     private EditText mAddress;
     private String[] mArraySpinner;
-    private Spinner mCategories;
     private Spinner mCastSpinner;
     private Spinner mMediumSpinner;
     private RatingBar mRB_1;
     private RatingBar mRB_2;
     private RatingBar mRB_3;
     private EditText mFeedback_com;
+    boolean mIsUploading;
 
     private int mType1=0;
     private int mType2=0;
@@ -79,7 +79,6 @@ public class PostsActivity extends AppCompatActivity {
     private ArrayAdapter<String> casti;
     private ArrayAdapter<String> komunikacia;
     private final static int MaxTagsPerPost = 3;
-    private final String[] categories = {"Problemy","V procese", "Vyriesene"};
     private Uri mImgUrl1;
     private Uri mImgUrl2;
 
@@ -100,20 +99,17 @@ public class PostsActivity extends AppCompatActivity {
 
         mImgUrl1 = null;
         mImgUrl2 = null;
+        mIsUploading = false;
         mSelectedImg = 0;
         mPostButton = (Button) findViewById(R.id.b_post);
         mPostText = (EditText) findViewById(R.id.et_postText);
         mTitle = (EditText) findViewById(R.id.et_title);
         mAddress = (EditText) findViewById(R.id.et_location);
-        mCategories = (Spinner) findViewById(R.id.sp_categories);
         mAddImage1 = (Button) findViewById(R.id.b_addImg1);
         mAddImage2 = (Button) findViewById(R.id.b_addImg2);
         mTags = (EditText) findViewById(R.id.et_tags);
         mFeedbackButton = (Button) findViewById(R.id.b_addFeedback);
 
-        mArraySpinner = categories;
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, mArraySpinner);
-        mCategories.setAdapter(adapter);
 
         geocoder = new Geocoder(this);
 
@@ -210,6 +206,12 @@ public class PostsActivity extends AppCompatActivity {
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (mIsUploading) {
+                    Snackbar.make(v, getString(R.string.upload_in_progress), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
+                }
+
                 List<Address> addresses = null;
                 double longitude = 0;
                 double latitude = 0;
@@ -247,44 +249,46 @@ public class PostsActivity extends AppCompatActivity {
 
 
 
-                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude,true);
+                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),0, latitude, longitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
                 new HTTPrequest().execute(post);
-                feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                if (feedbackRef != null) {
 
-                        if (dataSnapshot.hasChild("Ratings")) {
-                            Feedback feedback = dataSnapshot.child("Ratings").getValue(Feedback.class);
-                            feedback.mN++;
-                            feedback.mT_1+=mType1;
-                            feedback.mT_2+=mType2;
-                            feedback.mT_3+=mType3;
-                            feedbackRef.child("Ratings").setValue(feedback);
-                        } else {
-                            Feedback feedback = new Feedback(1, mType1, mType2, mType3);
-                            feedbackRef.child("Ratings").setValue(feedback);
-                        };
+                    feedbackRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (!mFeedback_com.getText().toString().isEmpty()) {
-                            FeedbackComment fb_com = new FeedbackComment(mFeedback_com.getText().toString(), OakappMain.firebaseUser.getUid());
-                            fb_com.mKey = feedbackRef.child("Comments").push().getKey();
-                            feedbackRef.child("Comments").child(fb_com.mKey).setValue(fb_com);
+                            if (dataSnapshot.hasChild("Ratings")) {
+                                Feedback feedback = dataSnapshot.child("Ratings").getValue(Feedback.class);
+                                feedback.mN++;
+                                feedback.mT_1+=mType1;
+                                feedback.mT_2+=mType2;
+                                feedback.mT_3+=mType3;
+                                feedbackRef.child("Ratings").setValue(feedback);
+                            } else {
+                                Feedback feedback = new Feedback(1, mType1, mType2, mType3);
+                                feedbackRef.child("Ratings").setValue(feedback);
+                            };
+
+                            if (!mFeedback_com.getText().toString().isEmpty()) {
+                                FeedbackComment fb_com = new FeedbackComment(mFeedback_com.getText().toString(), OakappMain.firebaseUser.getUid());
+                                fb_com.mKey = feedbackRef.child("Comments").push().getKey();
+                                feedbackRef.child("Comments").child(fb_com.mKey).setValue(fb_com);
+                            }
+
+
                         }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-
-
-
+                }
+                finish();
             }
         });
 
@@ -295,6 +299,7 @@ public class PostsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+            mIsUploading = true;
             Uri selectedImage = data.getData();
             StorageReference photoReference = mPostPhotosreference.child(selectedImage.getLastPathSegment());
             photoReference.putFile(selectedImage).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -310,6 +315,8 @@ public class PostsActivity extends AppCompatActivity {
                         default:
                             break;
                     }
+                    mIsUploading = false;
+                    Snackbar.make(findViewById(android.R.id.content), getString(R.string.upload_success), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         }
