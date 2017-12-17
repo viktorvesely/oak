@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +27,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 import com.firebase.client.Firebase;
@@ -61,6 +64,7 @@ public class MainScreen extends AppCompatActivity{
     private ListView mPostsListView;
     private FloatingActionButton fab;
     private ListView mDrawerList;
+    private RadioGroup mCategories;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
@@ -82,6 +86,7 @@ public class MainScreen extends AppCompatActivity{
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
+        mCategories = findViewById(R.id.rb_categories);
 
         mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
         ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
@@ -137,7 +142,8 @@ public class MainScreen extends AppCompatActivity{
         mPostRef = mRootRef.child("Posts");
         mUserRef = mRootRef.child("Users");
         mFirebaseAuth = FirebaseAuth.getInstance();
-        adapter = new PostArrayAdapter(this, OakappMain.postsToShow);
+        mCategories.check(R.id.rb_problems);
+        adapter = new PostArrayAdapter(this, OakappMain.postsToShow, RB_SOLVED);
         mPostsListView.setAdapter(adapter);
 
         //listeners
@@ -147,6 +153,22 @@ public class MainScreen extends AppCompatActivity{
             public void onClick(View view) {
                 Intent newPost = new Intent(getApplicationContext(), PostsActivity.class);
                 startActivity(newPost);
+            }
+        });
+
+        mCategories.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case R.id.rb_problems:
+                        adapter = new PostArrayAdapter(getBaseContext(), OakappMain.postsToShow, RB_SOLVED);
+                        break;
+                    case R.id.rb_solved:
+                        adapter = new PostArrayAdapter(getBaseContext(), OakappMain.postsToShow, RB_PROBLEMS);
+                        break;
+                }
+                mPostsListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -369,4 +391,6 @@ public class MainScreen extends AppCompatActivity{
         public static final int TIPS = 7;
     }
 
+    public static final int RB_PROBLEMS = 0;
+    public static final int RB_SOLVED  = 1;
 }
