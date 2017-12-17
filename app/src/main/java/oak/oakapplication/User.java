@@ -29,33 +29,41 @@ public class User {
         mOwnPosts = new ArrayList<String>();
         mOwnComments = new ArrayList<String>();
         mFavoritePosts = new ArrayList<String>();
+        mRatedComments = new ArrayList<String>();
+        mLikedPosts = new ArrayList<String>();
+        mDislikedComments = new ArrayList<String>();
+        mUniqueName = "NONE";
+        mUsername = "NONE";
+        mReputation = 0;
+        mJudgePower = 0;
+        mActive = true;
+        mAdmin = false;
+        mPhoto = "NONE";
+        mId = "NONE";
+        mFCMToken = "NONE";
+        lastLogged = 0;
     }
 
     public String mUsername;
     public String mUniqueName;
+    public String mFCMToken;
     public int mReputation;
     public long mJudgePower;
     public boolean mActive;
     public boolean mAdmin;
-    public Uri mPhoto;
+    public String mPhoto;
     public List<String> mOwnPosts;
     public List<String> mOwnComments;
     public List<String>mFavoritePosts;
+    public List<String>mLikedPosts;
+    public List<String>mRatedComments;
+    public List<String>mDislikedComments;
     public String mId;
     public long lastLogged;
 
+    public int Level() {return OakappMain.getRankLevelFromRep(mReputation);}
+    public String Rank() {return OakappMain.getRankFromLevel(OakappMain.getRankLevelFromRep(mReputation));}
 
-
-    //generated;
-    private String mRank;
-    private int mLevel;
-
-
-
-    public void SetLevel(int level) {mLevel = level;}
-    public int Level() {return mLevel;}
-    public void SetRank (String rank) {mRank = rank;}
-    public String Rank() {return mRank;}
 
     public boolean ActivateUser (String username, int reputation, boolean isActive, boolean isAdmin, String id)
     {
@@ -65,22 +73,22 @@ public class User {
 
         mUsername = username;
         mReputation = reputation;
-        mLevel = OakappMain.getRankLevelFromRep(mReputation);
-        mRank = OakappMain.getRankFromLevel(mLevel);
         mAdmin = isAdmin;
         mOwnPosts.add("INIT");
         mFavoritePosts.add("INIT");
+        mOwnComments.add("INIT");
+        mRatedComments.add("INIT");
+        mLikedPosts.add("INIT");
+        mDislikedComments.add("INIT");
         mId = id;
-        mJudgePower = OakappMain.remoteConfig.getLong("judgepower_default_value");
-
+        mJudgePower = 10;
+        lastLogged = System.currentTimeMillis();
 
         return true;
     }
 
     public void AddReputation(int repBoost) {
         mReputation += repBoost;
-        mLevel = OakappMain.getRankLevelFromRep(mReputation);
-        mRank = OakappMain.getRankFromLevel(mLevel);
     }
 
 }

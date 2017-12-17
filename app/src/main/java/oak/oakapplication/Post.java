@@ -35,6 +35,7 @@ public class Post {
         this.mLastActivity = System.currentTimeMillis();
         //init comments ?
         this.mActive = true;
+        this.mNotificationKey = "NONE";
     }
 
 
@@ -53,12 +54,23 @@ public class Post {
     public String mKey;
     //generated
     public int mReputation;
+    public String mNotificationKey;
     public long mTimestamp;
     public long mLastActivity;
     public boolean mActive;
 
     //may change in future
     public List<String> comments;
+
+
+    public int numberOfImgs() {
+        int count = 0;
+        if (! mImgUrl1.isEmpty()) { count++;}
+
+        if (! mImgUrl2.isEmpty()) {count ++;}
+
+        return count;
+    }
 
     //static
     private static final int defaultRep = 0;

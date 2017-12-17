@@ -1,21 +1,30 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.location.Location;
 import com.facebook.FacebookSdk;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 
@@ -33,28 +42,29 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class MainScreen extends AppCompatActivity {
+public class MainScreen extends AppCompatActivity{
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
     private DatabaseReference mUserRef;
     private ChildEventListener mPostListener;
     private PostArrayAdapter adapter;
-    private OakappMain main;
-    public static MainScreen selfPointer;
     private ListView mPostsListView;
     private FloatingActionButton fab;
+    private ListView mDrawerList;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
     private static int RC_SIGN_IN = 1;
-
-    private Button mButtonSignOut;
 
 
     @Override
@@ -64,21 +74,65 @@ public class MainScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        main = ((OakappMain)getApplicationContext());
-        if (OakappMain.HasInternetAcces() == false) {
-            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
-        }
+        HasInternet toGarbage = new HasInternet();
+        toGarbage.execute();
 
         //find views
 
-        mButtonSignOut = (Button) findViewById(R.id.b_signOut);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
 
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //OakappMain.OnMenuItemSelected(position, MainScreen.this);
+                switch (position) {
+                    case MenuOptions.HOME:
+                        closeOptionsMenu(); //idk if this works
+                        break;
+
+                    case MenuOptions.ADMIN:
+                        Intent admin = new Intent(MainScreen.this, AdminFunctions.class);
+                        startActivity(admin);
+                        break;
+
+                    case MenuOptions.CATEGORY:
+                        break;
+
+                    case MenuOptions.SETTINGS:
+                        break;
+
+                    case MenuOptions.TIPS:
+                        Intent tips = new Intent(MainScreen.this, Tips.class);
+                        startActivity(tips);
+                        break;
+
+                    case MenuOptions.FEEDBACKS:
+                        Intent intent = new Intent(MainScreen.this, Feedbacky.class);
+                        startActivity(intent);
+                        break;
+                    case MenuOptions.PROFILE:
+                        Intent mainscreen = new Intent(MainScreen.this, MyProfile.class);
+                        mainscreen.putExtra("uid", OakappMain.THIS_USER);
+                        startActivity(mainscreen);
+                        break;
+                    case MenuOptions.SIGNOUT:
+                        AuthUI.getInstance().signOut(MainScreen.this);
+                        break;
+
+
+                    default:
+                        break;
+                }
+            }
+        });
+
         //Init
-        selfPointer = this;
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mPostRef = mRootRef.child("Posts");
         mUserRef = mRootRef.child("Users");
@@ -91,7 +145,7 @@ public class MainScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newPost = new Intent(selfPointer, PostsActivity.class);
+                Intent newPost = new Intent(getApplicationContext(), PostsActivity.class);
                 startActivity(newPost);
             }
         });
@@ -100,7 +154,7 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent openPost = new Intent(selfPointer, oak.oakapplication.openPost.class);
+                Intent openPost = new Intent(MainScreen.this, oak.oakapplication.openPost.class);
                 openPost.putExtra("id",position);
                 startActivity(openPost);
             }
@@ -111,7 +165,7 @@ public class MainScreen extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 OakappMain.firebaseUser = firebaseAuth.getCurrentUser();
                 if (OakappMain.firebaseUser != null) {
-                onSignedInInit();
+                    onSignedInInit();
                 }
                 else {
                     onSignedOutCleanUp();
@@ -121,20 +175,13 @@ public class MainScreen extends AppCompatActivity {
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())) //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
                                     .build(),
                             RC_SIGN_IN);
                 }
             }
         };
 
-        mButtonSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AuthUI.getInstance().signOut(selfPointer);
-            }
-        });
 
     }
 
@@ -165,33 +212,39 @@ public class MainScreen extends AppCompatActivity {
 
     private void onSignedInInit() {
 
-        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
-                    OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
-                        @Override
-                        public void UserListener(User u) {
-                            OakappMain.user = u;
-                            InitUser();
+        if (! OakappMain.UserAlreadyExist) {
+            Log.i(TAG, "onSignInInit: Loading user from database");
+            mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
+                        OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
+                            @Override
+                            public void UserListener(User u) {
+                                OakappMain.user = u;
+                                InitUser();
+                            }
+                        });
+                    }
+                    else {
+                        RegisterUser();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "onSignInInit reading failed " + databaseError.getMessage());
                 }
             });
-                }
-                else {
-                    RegisterUser();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        }
+        else {
+            Log.i(TAG, "onSignInInit: user already loaded");
+        }
     }
 
     private void onSignedOutCleanUp () {
         OakappMain.user.mUsername = "anonymous";
+        OakappMain.UserAlreadyExist = false;
         adapter.clear();
     }
 
@@ -227,7 +280,7 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //on error
+                Log.w(TAG, "Reading Posts from database failed " + databaseError.getMessage());
             }
 
         };
@@ -254,6 +307,12 @@ public class MainScreen extends AppCompatActivity {
         if (OakappMain.user.mAdmin)
             AdminSettings.Activate();
 
+        if (OakappMain.user.mFCMToken.isEmpty() || OakappMain.user.mFCMToken.equals("NONE")) {
+            OakappMain.user.mFCMToken = OakappMain.getToken();
+            OakappMain.SaveUserByUid(OakappMain.user);
+        }
+
+        OakappMain.UserAlreadyExist = true;
         attachDatabaseReadListener();
     }
 
@@ -267,6 +326,47 @@ public class MainScreen extends AppCompatActivity {
             startActivity(deactivate);
         }
 
-        mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
+        Intent extraRegInfo = new Intent(this, Registration.class);
+        startActivity(extraRegInfo);
+
+
     }
+
+    private static final String TAG = "MainScreen";
+
+
+    public class HasInternet extends AsyncTask<Void, Void, Boolean> {
+
+        protected Boolean doInBackground(Void ... v) {
+            try {
+                int timeoutMs = 1500;
+                Socket sock = new Socket();
+                SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+                sock.connect(sockaddr, timeoutMs);
+                sock.close();
+
+                return true;
+            } catch (IOException e) { return false; }
+        }
+
+
+        protected void onPostExecute(Boolean result) {
+            if (! result) {
+                Snackbar.make(findViewById(android.R.id.content).getRootView(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        }
+    }
+
+    private static class MenuOptions {
+        public static final int HOME = 0;
+        public static final int CATEGORY = 1;
+        public static final int FEEDBACKS = 2;
+        public static final int PROFILE = 3;
+        public static final int SETTINGS = 4;
+        public static final int SIGNOUT = 5;
+        public static final int ADMIN = 6;
+        public static final int TIPS = 7;
+    }
+
 }

@@ -2,13 +2,15 @@
     <string name="app_name">Oakapplication</string>
     <string name="title_activity_main_screen">MainScreen</string>
     <string name="facebook_app_id">1916678708584576</string>
+    <string name="sender_id">305148276044</string>
+    <string name="api_key">AIzaSyBlMs38H5nB-uHm1xBMQ3k6HaD4b_meXN0</string>
 
     <string name="min_tags">Aspon jeden tag</string>
     <string name="max_tags">Maximalne 4 tagy</string>
     <string name="no_title">Musis zadat nadpis</string>
     <string name="no_text">Musis napisat nejaky text do postu</string>
     <string name="complete_action">Dokonci akciu s</string>
-    <string name="no_internet_connection">Nemas pripojenie k internetu</string>
+    <string name="no_internet_connection">Doporucujeme internet na spravne pouzivanie nasej aplikacie</string>
     <string name="no_address_found">Nenasla sa zaidna adresa</string>
     <string name="you_wasnt_there">je nam luto ze si nebol aktivny teraz nemas rep za to</string>
     <string name="just_now">prave teraz</string>
@@ -23,21 +25,24 @@
     <string name="button_continue">dalej</string>
     <string name="deactivate_msg">Tvoje konto bolo zrusene ak si myslis ze nastala chyba kontaktuj nas</string>
     <string name="no_photo_selected">Musis si zvolit fotku</string>
-    <string name="short_username">Prezyvka musi byt aspon 4 pismenka dlha plz ludia</string>
+    <string name="bad_username">Prezyvka musi byt: dlshia ako 4, nensia ako 15 a nesmie obsahovat specialne znaky</string>
     <string name="duplicate_name">Uz ta niekto predbehol</string>
+    <string name="upload_success">Obrazok uploadnuty</string>
+    <string name="upload_in_progress">Obrazok este nie je uploadnuty</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>
     <string name="rank_level2">SuperSuperObcan</string>
+    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
-    <string name="Posts_et_text">Git</string>
-    <string name="Posts_et_title">Ma nema</string>
-    <string name="posts_tw_categories">rad</string>
-    <string name="Posts_b_addImg2">robim</string>
-    <string name="Posts_b_addImg1">to uz</string>
-    <string name="Posts_et_location">druhy krat</string>
-    <string name="Posts_et_tags">a</string>
-    <string name="Posts_b_post">tak</string>
+    <string name="Posts_et_text">Text</string>
+    <string name="Posts_et_title">Title</string>
+    <string name="Posts_b_addImg2">Img2</string>
+    <string name="Posts_b_addImg1">Img1</string>
+    <string name="Posts_et_location">Ulica</string>
+    <string name="Posts_et_tags">Tags</string>
+    <string name="Posts_b_post">Postni</string>
+    <string name="posts_tw_categories">kategorie</string>
 
     <string name="ci_b_edit">edit</string>
     <string name="ci_b_plus">+?</string>
@@ -48,18 +53,22 @@
 
     <string name="createCom_et_TextDialog">Komentar</string>
     <string name="createCom_cb_dc">Priama sprava</string>
+    <string name="createCom_b_createComment">Komentuj</string>
+    <string name="openPost_b_editPost">Uprav</string>
 
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>
+    <string name="editCom_b_delete">Zmaz</string>
 
-    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
+    <string name="profile_tv_reputation">Rep</string>
+    <string name="profile_b_savedPosts">Ulozene posty</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="mestske_casti">
         <item>"Staré Mesto"</item>
-        <item>"Ružinov"</item>
+        <item>"Ruzinov"</item>
         <item>"Vrakuňa"</item>
         <item>"Podunajské Biskupice"</item>
         <item>"Nové Mesto"</item>
@@ -78,5 +87,103 @@
         <item>"Magistrát hlavného mesta"</item>
         <item>"Rôzne"</item>
     </string-array>
+
+    <string-array name="menu">
+        <item>Domov</item>
+        <item>Kategórie</item>
+        <item>Feedbacky</item>
+        <item>Profil</item>
+        <item>Nastavenia</item>
+        <item>Odhlásiť sa</item>
+        <item>Admin funkcie</item>
+        <item>Tipy</item>
+    </string-array>
+
+    <string-array name="komunikacia">
+        <item>"Facebook"</item>
+        <item>"Telefon"</item>
+        <item>"Mail"</item>
+    </string-array>
+
+    <string name="title_activity_menu_activity">menu_activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
 
 </resources>
