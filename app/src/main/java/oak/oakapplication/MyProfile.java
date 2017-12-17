@@ -3,6 +3,8 @@ package oak.oakapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 
-public class MyProfile extends AppCompatActivity {
+public class MyProfile extends Menu {
 
     private ImageView mProfilePicture;
     private TextView mUsername;
@@ -28,6 +30,8 @@ public class MyProfile extends AppCompatActivity {
     private TextView mJudgePower;
     private Button mSavedPosts;
     private User mUser;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
     private boolean mInit;
 
@@ -62,7 +66,8 @@ public class MyProfile extends AppCompatActivity {
         mSavedPosts = (Button) findViewById(R.id.b_savedPosts);
         mJudgePower = (TextView) findViewById(R.id.tv_judgePower);
 
-        ListView mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
         ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
         mDrawerList.setAdapter(menu);
 
@@ -73,38 +78,14 @@ public class MyProfile extends AppCompatActivity {
             mSavedPosts.setVisibility(View.GONE);
         }
 
-
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //OakappMain.OnMenuItemSelected(position, MyProfile.this);
-                switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        Intent feedbacky = new Intent(MyProfile.this, Feedbacky.class);
-                        startActivity(feedbacky);
-                        break;
-                    case 3:
-                        Intent intent = new Intent(MyProfile.this, MyProfile.class);
-                        intent.putExtra("uid", OakappMain.THIS_USER);
-                        startActivity(intent);
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        AuthUI.getInstance().signOut(MyProfile.this);
-                        break;
-
-                    default:
-                        break;
-                }
+                OnMenuItemSelected(position);
+                mDrawerLayout.closeDrawers();
             }
         });
-
 
     }
 
@@ -117,6 +98,15 @@ public class MyProfile extends AppCompatActivity {
         Glide.with(mProfilePicture.getContext()).load(Uri.parse(OakappMain.user.mPhoto)).into(mProfilePicture);
 
         if(AdminSettings.wereActivated) {mJudgePower.setText(String.valueOf(mUser.mJudgePower));}
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+        }else{
+            super.onBackPressed();
+        }
     }
 
 

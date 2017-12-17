@@ -54,7 +54,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class MainScreen extends AppCompatActivity{
+public class MainScreen extends Menu{
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
@@ -64,6 +64,7 @@ public class MainScreen extends AppCompatActivity{
     private ListView mPostsListView;
     private FloatingActionButton fab;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
     private RadioGroup mCategories;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -87,55 +88,6 @@ public class MainScreen extends AppCompatActivity{
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
         mCategories = findViewById(R.id.rb_categories);
-
-        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
-        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
-        mDrawerList.setAdapter(menu);
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //OakappMain.OnMenuItemSelected(position, MainScreen.this);
-                switch (position) {
-                    case MenuOptions.HOME:
-                        closeOptionsMenu(); //idk if this works
-                        break;
-
-                    case MenuOptions.ADMIN:
-                        Intent admin = new Intent(MainScreen.this, AdminFunctions.class);
-                        startActivity(admin);
-                        break;
-
-                    case MenuOptions.CATEGORY:
-                        break;
-
-                    case MenuOptions.SETTINGS:
-                        break;
-
-                    case MenuOptions.TIPS:
-                        Intent tips = new Intent(MainScreen.this, Tips.class);
-                        startActivity(tips);
-                        break;
-
-                    case MenuOptions.FEEDBACKS:
-                        Intent intent = new Intent(MainScreen.this, Feedbacky.class);
-                        startActivity(intent);
-                        break;
-                    case MenuOptions.PROFILE:
-                        Intent mainscreen = new Intent(MainScreen.this, MyProfile.class);
-                        mainscreen.putExtra("uid", OakappMain.THIS_USER);
-                        startActivity(mainscreen);
-                        break;
-                    case MenuOptions.SIGNOUT:
-                        AuthUI.getInstance().signOut(MainScreen.this);
-                        break;
-
-
-                    default:
-                        break;
-                }
-            }
-        });
 
         //Init
         mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -204,6 +156,21 @@ public class MainScreen extends AppCompatActivity{
             }
         };
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                OnMenuItemSelected(position);
+                mDrawerLayout.closeDrawers();
+
+            }
+        });
+
 
     }
 
@@ -230,6 +197,15 @@ public class MainScreen extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+        }else{
+            super.onBackPressed();
+        }
     }
 
     private void onSignedInInit() {
@@ -379,18 +355,6 @@ public class MainScreen extends AppCompatActivity{
             }
         }
     }
-
-    private static class MenuOptions {
-        public static final int HOME = 0;
-        public static final int CATEGORY = 1;
-        public static final int FEEDBACKS = 2;
-        public static final int PROFILE = 3;
-        public static final int SETTINGS = 4;
-        public static final int SIGNOUT = 5;
-        public static final int ADMIN = 6;
-        public static final int TIPS = 7;
-    }
-
     public static final int RB_PROBLEMS = 0;
     public static final int RB_SOLVED  = 1;
 }

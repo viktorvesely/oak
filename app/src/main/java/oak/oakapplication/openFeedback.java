@@ -1,11 +1,16 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.RatingBar;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -19,14 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class openFeedback extends AppCompatActivity {
+public class openFeedback extends Menu {
 
     private DatabaseReference mFeedbackRef;
     private Feedback Fb;
     private Feedback Tel;
     private Feedback Mail;
     private String cast;
-    private String current;
+    private int current;
     private ArrayAdapter<String> komunikacia;
     private boolean initialDisplay = true;
     private ArrayList<FeedbackComment> mComments;
@@ -38,12 +43,17 @@ public class openFeedback extends AppCompatActivity {
     private RatingBar mRB3;
     private Spinner mMediumSpinner;
     private ListView mCommentList;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ArrayAdapter menu;
+    private Intent intent;
+    private Button mContactButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_feedback);
-        Intent intent = getIntent();
+        intent = getIntent();
         cast = intent.getStringExtra("cast");
 
         mRB1 = (RatingBar) findViewById(R.id.rb_t1);
@@ -54,6 +64,22 @@ public class openFeedback extends AppCompatActivity {
         mCommentList = (ListView) findViewById(R.id.lv_com);
 
         mFeedbackRef = FirebaseDatabase.getInstance().getReference().child("Feedback").child(cast);
+        mContactButton = (Button)findViewById(R.id.b_contact);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                OnMenuItemSelected(position);
+                mDrawerLayout.closeDrawers();
+
+            }
+        });
 
         mFeedbackRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -117,10 +143,41 @@ public class openFeedback extends AppCompatActivity {
             {
             }
         });
+/*
+        mContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (current) {
 
+                    case 0:
+
+                        break;
+
+                    case 1:
+                        break;
+
+                    case 2:
+                        String TO = getResources().getString(R.array.mail);
+                        Intent mail = new Intent(Intent.ACTION_SEND);
+
+                        mail.setType("text/plain");
+                        mail.putExtra(Intent.EXTRA_EMAIL, TO);
+                        try {
+                            startActivity(Intent.createChooser(mail, "Send mail..."));
+                            finish();
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(MainActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                        }
+                }
+                    default:
+                        break;
+            }
+        });
+*/
     };
 
         public void ChangeMedium (Feedback q, int i) {
+            current = i;
             if (adapter != null) {
                 adapter.clear();
             }
@@ -152,7 +209,15 @@ public class openFeedback extends AppCompatActivity {
                     }
                 });
 
+    }
 
+    @Override
+    public void onBackPressed(){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+        }else{
+            super.onBackPressed();
+        }
     }
 
 }

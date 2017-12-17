@@ -1,6 +1,8 @@
 package oak.oakapplication;
 
 import android.content.Context;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class Tips extends AppCompatActivity {
+public class Tips extends Menu {
 
     private JsonTips mJsonTips;
     private String mJson;
@@ -38,6 +43,8 @@ public class Tips extends AppCompatActivity {
     private int mCurrentPosition;
     private GestureDetector mGestureDetector;
     private final float MINDELTATOSWIPE = 260;
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
 
 
     @Override
@@ -71,6 +78,21 @@ public class Tips extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 mGestureDetector.onTouchEvent(event);
                 return true;
+            }
+        });
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.lv_drawerlist);
+        ListAdapter menu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu));
+        mDrawerList.setAdapter(menu);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                OnMenuItemSelected(position);
+                mDrawerLayout.closeDrawers();
+
             }
         });
 
@@ -199,6 +221,7 @@ public class Tips extends AppCompatActivity {
             manager.scrollToPosition(mCurrentPosition);
             return true;
         }
+
     }
 
     public class CustomGridLayoutManager extends LinearLayoutManager {
@@ -216,6 +239,15 @@ public class Tips extends AppCompatActivity {
         public boolean canScrollVertically() {
             //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
             return isScrollEnabled && super.canScrollVertically();
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+        }else{
+            super.onBackPressed();
         }
     }
 
