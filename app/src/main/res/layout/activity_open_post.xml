@@ -116,12 +116,30 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/b_editPost"
-                style="@style/Widget.AppCompat.Button.Borderless"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/openPost_b_editPost" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/b_join"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/b_start_solving" />
+
+                <Button
+                    android:id="@+id/b_editPost"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/openPost_b_editPost" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_participants"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/et_comment"

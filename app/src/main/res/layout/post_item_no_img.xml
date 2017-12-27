@@ -7,8 +7,8 @@
     <TextView
         android:id="@+id/tv_noImgTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.01"
+        android:layout_height="100dp"
+        android:layout_weight="0"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -16,6 +16,12 @@
     <TextView
         android:id="@+id/tv_noImgText"
         android:layout_width="match_parent"
-        android:layout_height="372dp" />
+        android:layout_height="330dp" />
+
+    <RadioButton
+        android:id="@+id/rb_checkMark"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0" />
 
 </LinearLayout>

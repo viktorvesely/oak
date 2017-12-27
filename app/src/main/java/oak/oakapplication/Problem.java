@@ -22,13 +22,41 @@ public class Problem {
         this.mParent = post;
         this.mWorking = new ArrayList<>();
         this.mStartedWorking = new ArrayList<>();
-
+        this.mBanList = new ArrayList<>();
     }
 
-    public boolean addWorker(String userID) {
+    Problem() {
+        this.mWorking = new ArrayList<>();
+        this.mStartedWorking = new ArrayList<>();
+        this.mBanList = new ArrayList<>();
+    }
+
+    public boolean kickUser(String userID) {
+        int index = mWorking.indexOf(userID);
+        if (index == -1)
+            return false;
+        mBanList.add(userID);
+        mWorking.remove(index);
+        return true;
+    }
+
+
+    public int addWorker(String userID) {
         if (mWorking.size() < 6) {
             mStartedWorking.add(System.currentTimeMillis());
+
+            if (mWorking.contains(userID)) {
+                return Responses.ALREADYIN;
+            }
+
+            if (mWorking.size() == 1) {
+                mOwner = userID;
+            }
+            else if (mBanList.contains(userID)) {
+                return Responses.BANNED;
+            }
             mWorking.add(userID);
+
             if (! userID.equals("INIT")) {
                 OakappMain.getPostByKey(mParent, new PostListener() {
                     @Override
@@ -38,9 +66,9 @@ public class Problem {
                     }
                 });
             }
-            return  true;
+            return Responses.ADDED;
         }
-        return false;
+        return Responses.FULL;
 
     }
 
@@ -48,12 +76,16 @@ public class Problem {
         return  mStartedWorking.get(mWorking.indexOf(userID));
     }
 
-    public boolean workingOn() {
-        if (mWorking.size() > 1) {
-            return true;
-        }
-        return false;
+    public int numOfWorkers() {
+        return mWorking.size() - 1;
     }
+
+    public void solved() {
+        mActive = false;
+        save();
+    }
+
+
 
     public void save() {
         FirebaseDatabase.getInstance().getReference().child("Problems").child(mParent).setValue(this);
@@ -77,6 +109,17 @@ public class Problem {
     }
 
     public String mParent;
+    public String mOwner;
+    public boolean mActive;
+    public List<String> mBanList;
     public List<String> mWorking;
     public List<Long> mStartedWorking;
+
+    public class Responses {
+        public static final int BANNED = 0;
+        public static final int ALREADYIN = 1;
+        public static final int FULL = 2;
+        public static final int ADDED = 3;
+    }
+
 }

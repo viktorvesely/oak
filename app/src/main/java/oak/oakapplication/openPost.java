@@ -2,11 +2,14 @@ package oak.oakapplication;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +40,7 @@ public class openPost extends AppCompatActivity {
     private boolean isThisDirectMessage;
 
     private static final int MINPLUSESTOBETOP = 10;
+    private static  final int MAXWORKERS = 5;
 
     private OakappMain main;
 
@@ -47,10 +51,13 @@ public class openPost extends AppCompatActivity {
     private ImageView mImg2;
     private EditText mCommentAction;
     private HorizontalScrollView mHSV_Images;
+    private Button mJoin;
     private  EditText target;
     private Button mEditPost;
     private ImageView mOwnerPicture;
     private TextView mOwnerName;
+    private TextView mParticipants;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -67,12 +74,15 @@ public class openPost extends AppCompatActivity {
         mHSV_Images = (HorizontalScrollView) findViewById(R.id.hsv_postImages);
         mEditPost = (Button) findViewById(R.id.b_editPost);
         mOwnerName = (TextView) findViewById(R.id.tv_postOwnerName);
+        mJoin = findViewById(R.id.b_join);
+        mParticipants = findViewById(R.id.tv_participants);
         mOwnerPicture = (ImageView) findViewById(R.id.iv_postOwner);
 
         adapter = new CommentArrayAdapter(this,mComments);
         listView_comments.setAdapter(adapter);
         main = (OakappMain) getApplicationContext();
         mPost = OakappMain.postsToShow.get(getIntent().getIntExtra("id", 0));
+        final Problem  mProblem = new Problem(mPost.mKey);
         OakappMain.getUserByUid(mPost.mOwner, new UserInterface() {
             @Override
             public void UserListener(User u) {
@@ -86,12 +96,56 @@ public class openPost extends AppCompatActivity {
             }
         });
 
+        mProblem.load(new ProblemListener() {
+            @Override
+            public void problem(final Problem p) {
+                int workers = p.numOfWorkers();
+                if (workers == 0) { mJoin.setText(getString(R.string.b_start_solving));}
+                else if (workers < MAXWORKERS) { mJoin.setText(getString(R.string.b_join_problem)); mParticipants.setText(getString(R.string.tv_participants_num_of_workers) + " " + String.valueOf(workers) + " ľudí.");}
+                else {
+                    mJoin.setVisibility(View.GONE);
+                    mParticipants.setText(getString(R.string.b_problem_full));
+                }
+
+                mJoin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        switch (p.addWorker(OakappMain.user.mId)) {
+                            case Problem.Responses.BANNED:
+                                AlertDialog.Builder builder = new AlertDialog.Builder(openPost.this);
+                                View v = getLayoutInflater().inflate(R.layout.dialog_box_kicked, null);
+                                builder.setView(v);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                                break;
+                            case Problem.Responses.ADDED:
+                                mPost.mIsWorkedOn = true;
+                                OakappMain.SavePostByKey(mPost);
+                                OakappMain.user.mActiveProblems.add(mPost.mKey);
+                                Snackbar.make(view,R.string.added_to_your_problems, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                break;
+                            case Problem.Responses.ALREADYIN:
+                                Snackbar.make(view,R.string.problem_already_in, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                break;
+                            case Problem.Responses.FULL:
+                                Snackbar.make(view,R.string.problem_full, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                break;
+                        }
+                        p.save();
+                    }
+                });
+            }
+        });
+
         mEditPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
+
+
 
         mEditPost.setVisibility(View.INVISIBLE);
         mEditPost.setEnabled(false);
@@ -203,6 +257,8 @@ public class openPost extends AppCompatActivity {
 
     }
 
+
+    private final String TAG = "OpenPost";
 
     private int FindSpecialComment() {
         int min = -1;
