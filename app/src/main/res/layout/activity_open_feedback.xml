@@ -5,7 +5,6 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     tools:context="oak.oakapplication.openFeedback">
 
     <LinearLayout
@@ -14,6 +13,36 @@
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_ulica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_urad_hod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_datum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tv_web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
         <Spinner
             android:id="@+id/sp_komunikacia"
@@ -34,9 +63,11 @@
 
         <RatingBar
             android:id="@+id/rb_t1"
-            android:layout_width="match_parent"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:isIndicator="true"
+            android:numStars="5" />
 
         <TextView
             android:id="@+id/textView2"
@@ -46,8 +77,11 @@
 
         <RatingBar
             android:id="@+id/rb_t2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"/>
 
         <TextView
             android:id="@+id/textView3"
@@ -57,8 +91,11 @@
 
         <RatingBar
             android:id="@+id/rb_t3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"/>
 
         <TextView
             android:id="@+id/tv_com"

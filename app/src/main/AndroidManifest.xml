@@ -14,9 +14,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -94,7 +95,7 @@
 
         <activity android:name=".AdminFunctions" />
         <activity android:name=".Tips" />
-        <activity android:name=".ProblemsFeed"></activity>
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

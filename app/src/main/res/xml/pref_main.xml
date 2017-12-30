@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="key_send_feedback"
+        android:summary="ak sa ti daco nepaci"
+        android:title="Posli feedback" />
+
+    <Preference
+        android:key="key_donate"
+        android:summary="Cez stripe budes moct o chvilu .. asi"
+        android:title="Posli peniaze">
+    </Preference>
+
+    <Preference android:title="aj ine veci mozes robit">
+    </Preference>
+
+    <Preference android:title="len este neviem ze ake">
+    </Preference>
+
+</PreferenceScreen>
