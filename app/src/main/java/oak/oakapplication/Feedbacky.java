@@ -53,7 +53,6 @@ public class Feedbacky extends Menu {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 OnMenuItemSelected(position);
-                mDrawerLayout.closeDrawers();
 
             }
         });

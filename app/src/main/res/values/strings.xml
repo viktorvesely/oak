@@ -115,24 +115,24 @@
     <string name="title_activity_settings">Settings</string>
 
     <string-array name="facebook">
-        <item>https://www.facebook.com/staremesto.sk/</item>
+        <item>staremesto.sk/</item>
         <item></item>
-        <item>https://www.facebook.com/martinkurucstarostavrakune/</item>
-        <item>https://www.facebook.com/Podunajské-Biskupice-správy-život-udalosti-195764097116185/</item>
-        <item>https://www.facebook.com/banovemesto/</item>
-        <item>https://www.facebook.com/bratislavaraca/</item>
-        <item>https://www.facebook.com/BratislavaVajnory/</item>
-        <item>https://www.facebook.com/karlovavesonline/</item>
-        <item>https://www.facebook.com/Mestská-časť-Bratislava-Dúbravka-343467569182498/</item>
-        <item>https://www.facebook.com/lamac.oficialna.stranka/</item>
-        <item></item>
-        <item></item>
-        <item>https://www.facebook.com/Záhorská-Bystrica-oficiálna-stránka-134439196731942/</item>
-        <item>https://www.facebook.com/viembytpetrzalcan/</item>
+        <item>martinkurucstarostavrakune/</item>
+        <item>Podunajské-Biskupice-správy-život-udalosti-195764097116185/</item>
+        <item>banovemesto/</item>
+        <item>bratislavaraca/</item>
+        <item>BratislavaVajnory/</item>
+        <item>karlovavesonline/</item>
+        <item>Mestská-časť-Bratislava-Dúbravka-343467569182498/</item>
+        <item>lamac.oficialna.stranka/</item>
         <item></item>
         <item></item>
+        <item>Záhorská-Bystrica-oficiálna-stránka-134439196731942/</item>
+        <item>viembytpetrzalcan/</item>
         <item></item>
-        <item>https://www.facebook.com/Bratislava.sk/</item>
+        <item></item>
+        <item></item>
+        <item>Bratislava.sk/</item>
     </string-array>
 
     <string-array name="tel">

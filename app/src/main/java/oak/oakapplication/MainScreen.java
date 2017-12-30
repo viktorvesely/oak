@@ -150,6 +150,8 @@ public class MainScreen extends Menu{
                                     .setAvailableProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())) //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
+                                    .setTheme(R.style.SignIn)
+                                    .setLogo(R.drawable.signin_logo)
                                     .build(),
                             RC_SIGN_IN);
                 }

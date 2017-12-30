@@ -14,6 +14,8 @@ import android.widget.ListAdapter;
 import android.widget.RatingBar;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +50,9 @@ public class openFeedback extends Menu {
     private ArrayAdapter menu;
     private Intent intent;
     private Button mContactButton;
+    private TextView mTitle;
+    private TextView mUlica;
+    private TextView mUrad_hodiny;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,9 @@ public class openFeedback extends Menu {
         mRB1 = (RatingBar) findViewById(R.id.rb_t1);
         mRB2 = (RatingBar) findViewById(R.id.rb_t2);
         mRB3 = (RatingBar) findViewById(R.id.rb_t3);
+
+        mTitle = (TextView) findViewById(R.id.tv_title);
+        mTitle.setText(getResources().getStringArray(R.array.mestske_casti)[Integer.parseInt(cast)]);
 
         mComments = new ArrayList<FeedbackComment>();
         mCommentList = (ListView) findViewById(R.id.lv_com);
@@ -143,37 +151,48 @@ public class openFeedback extends Menu {
             {
             }
         });
-/*
+
         mContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (current) {
 
                     case 0:
+                        String id = getResources().getStringArray(R.array.facebook)[Integer.parseInt(cast)];
 
+                        try {
+                            Intent fb = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + id));
+                            startActivity(fb);
+                        } catch (Exception e) {
+                            Intent fb = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + id));
+                            startActivity(fb);
+                        }
                         break;
 
                     case 1:
+                        String number = getResources().getStringArray(R.array.tel)[Integer.parseInt(cast)];
+                        Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));
+                        startActivity(call);
                         break;
 
                     case 2:
-                        String TO = getResources().getString(R.array.mail);
+                        String TO = getResources().getStringArray(R.array.mail)[Integer.parseInt(cast)];
                         Intent mail = new Intent(Intent.ACTION_SEND);
 
-                        mail.setType("text/plain");
-                        mail.putExtra(Intent.EXTRA_EMAIL, TO);
+                        mail.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
+                        mail.setType("message/rfc822");
+
                         try {
                             startActivity(Intent.createChooser(mail, "Send mail..."));
-                            finish();
                         } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(MainActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
                         }
-                }
-                    default:
                         break;
+
+                }
             }
         });
-*/
+
     };
 
         public void ChangeMedium (Feedback q, int i) {

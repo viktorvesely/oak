@@ -44,6 +44,8 @@ public class Menu extends AppCompatActivity {
                     break;
 
                 case MenuOptions.SETTINGS:
+                    Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+                    startActivity(settings);
                     break;
 
                 case MenuOptions.TIPS:
