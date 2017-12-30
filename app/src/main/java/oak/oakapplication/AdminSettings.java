@@ -7,6 +7,7 @@ package oak.oakapplication;
 public class AdminSettings {
     public static boolean showInActivePosts = false;
     public static boolean showInActiveComments = false;
+    public static boolean trash = false;
 
 
     public static void Activate(){
