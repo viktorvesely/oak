@@ -32,7 +32,7 @@ class NoImgView
     NoImgView(View view) {
         this.mNoImgTitle = (TextView) view.findViewById(R.id.tv_noImgTitle);
         this.mNoImgText = (TextView) view.findViewById(R.id.tv_noImgText);
-        this.mWorkedOn = view.findViewById(R.id.rb_checkMark);
+        this.mWorkedOn = view.findViewById(R.id.rb_checkMark_no_img);
     }
     public TextView mNoImgTitle;
     public TextView mNoImgText;
