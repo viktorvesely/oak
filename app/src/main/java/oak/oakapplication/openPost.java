@@ -145,7 +145,7 @@ public class openPost extends AppCompatActivity {
                                 Snackbar.make(view,R.string.problem_full, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                 break;
                             case Problem.Responses.OWNER:
-                                createProblem(p, (ViewGroup) view.getParent());
+                                createProblem(p);
                                 break;
                         }
                         p.save();
@@ -273,9 +273,9 @@ public class openPost extends AppCompatActivity {
 
     }
 
-    private void createProblem(final Problem p, final ViewGroup parent) {
+    private void createProblem(final Problem p) {
         AlertDialog.Builder problemBuilder = new AlertDialog.Builder(openPost.this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_box_create_problem, null);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_box_create_problem, null);
         problemBuilder.setView(dialogView);
         final RadioButton joinAble = dialogView.findViewById(R.id.rb_joinable);
         final EditText et_name = dialogView.findViewById(R.id.et_problem_name);
@@ -292,7 +292,7 @@ public class openPost extends AppCompatActivity {
             public void onClick(View view) {
                 String name = et_name.getText().toString();
                 if (name.isEmpty()) {
-                    Snackbar.make(parent, R.string.db_create_problem_snackbar_invalid_name, Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                    Snackbar.make( dialogView, R.string.db_create_problem_snackbar_invalid_name, Snackbar.LENGTH_LONG).setAction("Action",null).show();
                     return;
                 }
                 p.setJoinAbilitie(joinAble.isChecked());
@@ -308,6 +308,8 @@ public class openPost extends AppCompatActivity {
             public void onCancel(DialogInterface dialogInterface) {
                 p.removeLast();
                 p.save();
+                mPost.mIsWorkedOn = false;
+                OakappMain.SavePostByKey(mPost);
             }
         });
 
