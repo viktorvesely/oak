@@ -41,6 +41,8 @@
     <string name="added_to_your_problems">Pridane do tvojich problemov</string>
     <string name="problem_full">Na probleme uz pracuje vela ludi</string>
     <string name="problem_already_in">Tento problem uz riesis</string>
+    <string name="problem_is_not_joinable">K tomuto problemu sa neda pridat</string>
+    <string name="max_problem_reached">Najprv vyries tie problemy ktore mas</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>
@@ -71,6 +73,13 @@
     <string name="editCom_b_change">Zmen</string>
     <string name="editCom_b_cancel">Zrus</string>
     <string name="editCom_b_delete">Zmaz</string>
+
+    <string name="db_create_problem_rb_joinable">Mozu sa pridat ostatni?</string>
+    <string name="db_create_problem_et_name_hint">Nazov problemu, nieco simple.</string>
+    <string name="db_create_problem_tv_warning">Nezacni riesit problem, ktory nechces riesit. Taketo spravanie sa tresta.
+        Na vyriesenie mas mesiac. Dakujeme ze sa zaujimas!</string>
+    <string name="db_create_problem_b_create_text">Vytvor</string>
+    <string name="db_create_problem_snackbar_invalid_name">Daj problemu meno.</string>
 
     <string name="profile_tv_reputation">Rep</string>
     <string name="profile_b_savedPosts">Ulozene posty</string>

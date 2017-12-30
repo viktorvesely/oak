@@ -240,6 +240,7 @@ public class PostsActivity extends AppCompatActivity {
                 OakappMain.SavePostByKey(post);
                 Problem problem = new Problem(post.mKey);
                 problem.addWorker("INIT");
+                problem.setJoinAbilitie(true);
                 problem.save();
 
                 new HTTPrequest().execute(post);

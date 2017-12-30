@@ -354,6 +354,7 @@ public class OakappMain extends Application {
 
     public static OakappMain selfPointer;
     public static final int MAXRANKLEVEL = 30;
+    public static final int MAXPROBLEMSIZE = 4;
     public static final String NO_PICTURE = "no_pic";
     public static final String THIS_USER = "this";
     public static boolean UserAlreadyExist = false;

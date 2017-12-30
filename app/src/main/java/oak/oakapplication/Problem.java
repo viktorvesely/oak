@@ -23,12 +23,21 @@ public class Problem {
         this.mWorking = new ArrayList<>();
         this.mStartedWorking = new ArrayList<>();
         this.mBanList = new ArrayList<>();
+        this.mName = "INIT";
+        this.mJoinable = true;
+        this.mOwner = "INIT";
+        this.mActive = true;
     }
 
     Problem() {
         this.mWorking = new ArrayList<>();
         this.mStartedWorking = new ArrayList<>();
         this.mBanList = new ArrayList<>();
+        this.mName = "INIT";
+        this.mJoinable = true;
+        this.mOwner = "INIT";
+        this.mParent = "INIT";
+        this.mActive = true;
     }
 
     public boolean kickUser(String userID) {
@@ -38,6 +47,17 @@ public class Problem {
         mBanList.add(userID);
         mWorking.remove(index);
         return true;
+    }
+
+    public void setName(String name) { mName = name; }
+    public String getName () { return mName; }
+
+    public void setJoinAbilitie(boolean status) {mJoinable = status;}
+    public boolean canJoin() {
+        if (mWorking.get(mWorking.size() -1).equals("INIT")) {
+            return true;
+        }
+        else {return  mJoinable;}
     }
 
 
@@ -66,10 +86,21 @@ public class Problem {
                     }
                 });
             }
-            return Responses.ADDED;
+            if (mOwner.equals(userID)) {
+                return Responses.OWNER;
+            }
+            else {
+                return Responses.ADDED;
+            }
         }
         return Responses.FULL;
 
+    }
+
+    public boolean removeLast() {
+        if (mWorking.get(mWorking.size() -1).equals("INIT")) { return false;}
+        mWorking.remove(mWorking.size() -1);
+        return true;
     }
 
     public Long getStartedTime(String userID) {
@@ -88,10 +119,12 @@ public class Problem {
 
 
     public void save() {
+        if (mParent == null || mParent.isEmpty()) { return; }
         FirebaseDatabase.getInstance().getReference().child("Problems").child(mParent).setValue(this);
     }
 
     public void load(final ProblemListener listener) {
+        if (mParent == null || mParent.isEmpty()) { return; }
         Query filter =  FirebaseDatabase.getInstance().getReference().child("Problems").orderByChild("mParent").equalTo(mParent);
 
         filter.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,16 +143,19 @@ public class Problem {
 
     public String mParent;
     public String mOwner;
+    public String mName;
     public boolean mActive;
     public List<String> mBanList;
     public List<String> mWorking;
     public List<Long> mStartedWorking;
+    public boolean mJoinable;
 
     public class Responses {
         public static final int BANNED = 0;
         public static final int ALREADYIN = 1;
         public static final int FULL = 2;
         public static final int ADDED = 3;
+        public static final int OWNER = 4;
     }
 
 }
