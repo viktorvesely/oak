@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,9 +32,11 @@ class NoImgView
     NoImgView(View view) {
         this.mNoImgTitle = (TextView) view.findViewById(R.id.tv_noImgTitle);
         this.mNoImgText = (TextView) view.findViewById(R.id.tv_noImgText);
+        this.mWorkedOn = view.findViewById(R.id.rb_checkMark);
     }
     public TextView mNoImgTitle;
     public TextView mNoImgText;
+    public RadioButton mWorkedOn;
 
 }
 
@@ -43,11 +46,13 @@ class ImgView
         this.mImage = (ImageView) view.findViewById(R.id.iv_postimg);
         this.mTitle = (TextView) view.findViewById(R.id.tv_titlePost);
         this.mText = (TextView) view.findViewById(R.id.tv_textPost);
+        this.mWorkedOn = view.findViewById(R.id.rb_checkMark);
     }
 
     public TextView mTitle;
     public TextView mText;
     public ImageView mImage;
+    public RadioButton mWorkedOn;
 }
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
@@ -92,6 +97,17 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
                 else  Glide.with(v.mImage.getContext()).load(post.mImgUrl2).into(v.mImage);
 
+                if (post.mCategory == 0 && post.mIsWorkedOn) {
+                    //convertView.setBackgroundColor(Color.parseColor("#2c65c1"));
+                    v.mWorkedOn.setChecked(true);
+                    v.mWorkedOn.setText(R.string.is_worked_on);
+                }
+                else if (post.mCategory == 0) {
+                    //convertView.setBackgroundColor(Color.parseColor("#0f9b18"));
+                    v.mWorkedOn.setText(R.string.free_problem);
+                }
+                v.mWorkedOn.setFocusable(false);
+
                 break;
             }
 
@@ -106,17 +122,20 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
                 nv.mNoImgTitle.setText(post.mTitle);
                 nv.mNoImgText.setText(post.mText);
-
+                if (post.mCategory == 0 && post.mIsWorkedOn) {
+                    //convertView.setBackgroundColor(Color.parseColor("#2c65c1"));
+                    nv.mWorkedOn.setChecked(true);
+                    nv.mWorkedOn.setText(R.string.is_worked_on);
+                }
+                else if (post.mCategory == 0) {
+                    //convertView.setBackgroundColor(Color.parseColor("#0f9b18"));
+                    nv.mWorkedOn.setText(R.string.free_problem);
+                }
+                nv.mWorkedOn.setFocusable(false);
                 break;
             }
 
 
-        }
-        if (post.mCategory == 0 && post.mIsWorkedOn) {
-            convertView.setBackgroundColor(Color.parseColor("#2c65c1"));
-        }
-        else if (post.mCategory == 0) {
-            convertView.setBackgroundColor(Color.parseColor("#0f9b18"));
         }
 
 

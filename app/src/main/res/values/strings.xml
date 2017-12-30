@@ -31,6 +31,16 @@
     <string name="upload_in_progress">Obrazok este nie je uploadnuty</string>
     <string name="rb_problems">Problemy</string>
     <string name="rb_solved">Vyriesene</string>
+    <string name="is_worked_on">Prave sa na tom pracuje</string>
+    <string name="free_problem">Nikto sa toho nechytil</string>
+    <string name="b_start_solving">Zacni riesit</string>
+    <string name="b_problem_full">Uz sa riesi</string>
+    <string name="b_join_problem">Pridaj sa</string>
+    <string name="tv_participants_num_of_workers">Na probleme prave pracuje </string>
+    <string name="kicked_from_group">Je nam luto ale vyhodili ta z goupy.</string>
+    <string name="added_to_your_problems">Pridane do tvojich problemov</string>
+    <string name="problem_full">Na probleme uz pracuje vela ludi</string>
+    <string name="problem_already_in">Tento problem uz riesis</string>
 
     <string name="default_rank">Obcan</string>
     <string name="rank_level1">SuperObcan</string>

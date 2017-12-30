@@ -42,6 +42,7 @@ public class User {
         mId = "NONE";
         mFCMToken = "NONE";
         lastLogged = 0;
+        mActiveProblems = new ArrayList<String>();
     }
 
     public String mUsername;
@@ -58,6 +59,7 @@ public class User {
     public List<String>mLikedPosts;
     public List<String>mRatedComments;
     public List<String>mDislikedComments;
+    public List<String>mActiveProblems;
     public String mId;
     public long lastLogged;
 
@@ -80,6 +82,8 @@ public class User {
         mRatedComments.add("INIT");
         mLikedPosts.add("INIT");
         mDislikedComments.add("INIT");
+        mActiveProblems.add("INIT");
+
         mId = id;
         mJudgePower = 10;
         lastLogged = System.currentTimeMillis();
