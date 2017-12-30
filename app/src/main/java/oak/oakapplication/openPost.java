@@ -1,5 +1,6 @@
 package oak.oakapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -57,6 +60,8 @@ public class openPost extends AppCompatActivity {
     private ImageView mOwnerPicture;
     private TextView mOwnerName;
     private TextView mParticipants;
+
+    private boolean mIsPublic;
 
 
     @Override
@@ -110,6 +115,14 @@ public class openPost extends AppCompatActivity {
                 mJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (! p.canJoin()) {
+                            Snackbar.make(view,R.string.problem_is_not_joinable, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                            return;
+                        }
+                        if (OakappMain.user.mActiveProblems.size() > OakappMain.MAXPROBLEMSIZE)  {
+                            Snackbar.make(view,R.string.max_problem_reached, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        }
+
 
                         switch (p.addWorker(OakappMain.user.mId)) {
                             case Problem.Responses.BANNED:
@@ -130,6 +143,9 @@ public class openPost extends AppCompatActivity {
                                 break;
                             case Problem.Responses.FULL:
                                 Snackbar.make(view,R.string.problem_full, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                break;
+                            case Problem.Responses.OWNER:
+                                createProblem(p, (ViewGroup) view.getParent());
                                 break;
                         }
                         p.save();
@@ -210,7 +226,7 @@ public class openPost extends AppCompatActivity {
                         mPost.comments.add(c.mKey);
                         mPost.mLastActivity = System.currentTimeMillis();
                         OakappMain.SavePostByKey(mPost);
-                        dialog.hide();
+                        dialog.dismiss();
 
                     }
                 });
@@ -254,6 +270,47 @@ public class openPost extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void createProblem(final Problem p, final ViewGroup parent) {
+        AlertDialog.Builder problemBuilder = new AlertDialog.Builder(openPost.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_box_create_problem, null);
+        problemBuilder.setView(dialogView);
+        final RadioButton joinAble = dialogView.findViewById(R.id.rb_joinable);
+        final EditText et_name = dialogView.findViewById(R.id.et_problem_name);
+        Button create = dialogView.findViewById(R.id.b_create_problem);
+        final AlertDialog dialog = problemBuilder.create();
+
+        joinAble.toggle();
+
+
+        dialog.show();
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = et_name.getText().toString();
+                if (name.isEmpty()) {
+                    Snackbar.make(parent, R.string.db_create_problem_snackbar_invalid_name, Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                    return;
+                }
+                p.setJoinAbilitie(joinAble.isChecked());
+                p.setName(name);
+                p.save();
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                p.removeLast();
+                p.save();
+            }
+        });
+
 
     }
 
