@@ -63,9 +63,11 @@
 
         <RatingBar
             android:id="@+id/rb_t1"
-            android:layout_width="match_parent"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:isIndicator="true"
+            android:numStars="5" />
 
         <TextView
             android:id="@+id/textView2"
@@ -75,8 +77,11 @@
 
         <RatingBar
             android:id="@+id/rb_t2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"/>
 
         <TextView
             android:id="@+id/textView3"
@@ -86,8 +91,11 @@
 
         <RatingBar
             android:id="@+id/rb_t3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"/>
 
         <TextView
             android:id="@+id/tv_com"
