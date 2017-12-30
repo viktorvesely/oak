@@ -22,6 +22,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -277,7 +278,7 @@ public class openPost extends AppCompatActivity {
         AlertDialog.Builder problemBuilder = new AlertDialog.Builder(openPost.this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_box_create_problem, null);
         problemBuilder.setView(dialogView);
-        final RadioButton joinAble = dialogView.findViewById(R.id.rb_joinable);
+        final Switch joinAble = dialogView.findViewById(R.id.rb_joinable);
         final EditText et_name = dialogView.findViewById(R.id.et_problem_name);
         Button create = dialogView.findViewById(R.id.b_create_problem);
         final AlertDialog dialog = problemBuilder.create();

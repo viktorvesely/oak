@@ -20,8 +20,8 @@
             android:hint="@string/db_create_problem_et_name_hint"
             android:inputType="textPersonName" />
 
-        <RadioButton
-            android:id="@+id/rb_joinable"
+        <Switch
+            android:id="@+id/s_joinable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/db_create_problem_rb_joinable" />
