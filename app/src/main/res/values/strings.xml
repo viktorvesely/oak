@@ -84,6 +84,18 @@
     <string name="profile_tv_reputation">Rep</string>
     <string name="profile_b_savedPosts">Ulozene posty</string>
 
+    <string name="problems_feed_tv_error">Nedokazali sme nacitat nic, asi doslo k preruseniu internetu</string>
+    <string name="problems_feed_tv_no_problems">Neriesis zatial ziadne problemy. Pozri news feed a do nejakeho sa pridaj ;).</string>
+    <string name="problems_feed_tv_not_all_items_were_loaded">Niktore problemy sa nenacitali skus. Skus to este raz.</string>
+    <string name="problem_item_b_canel_problem">Neriesit</string>
+    <string name="problem_item_b_solved">Vyrieseny</string>
+
+    <string name="b_edit_participant_kick_out">Vyhodit</string>
+    <string name="b_edit_participant_show_contact">Kontakt</string>
+
+    <string name="kick_out_confirm">Naozaj chces vyhodit %1$s zo skupiny? Tato akcia sa neda vratit spat.</string>
+    <string name="kicked_out_msg">%1$ vyhodeny</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -117,6 +129,7 @@
         <item>Odhlásiť sa</item>
         <item>Admin funkcie</item>
         <item>Tipy</item>
+        <item>Moje problemy</item>
     </string-array>
 
     <string-array name="komunikacia">

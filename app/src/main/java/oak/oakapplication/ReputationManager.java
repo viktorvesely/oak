@@ -27,7 +27,7 @@ public class ReputationManager {
         OakappMain.user.lastLogged = System.currentTimeMillis();
     }
 
-    public static void  LikePost(int likeLevel, int postId, User user) {
+    public static void  LikePost(int likeLevel, Post p, User user) {
         int repBoost = 0;
         double percentagePenalty = 0;
         switch (likeLevel) {
@@ -44,13 +44,12 @@ public class ReputationManager {
 
         repBoost = (int)(OakappMain.user.mJudgePower * percentagePenalty * 2);
 
-        Post post = OakappMain.postsToShow.get(postId);
-        post.mReputation += repBoost;
+        p.mReputation += repBoost;
         user.AddReputation(repBoost);
         user.mJudgePower += CalculateJudgePower(user, OakappMain.user, percentagePenalty);
         // also set rank
 
-        OakappMain.SavePostByKey(post);
+        OakappMain.SavePostByKey(p);
         OakappMain.SaveUserByUid(user);
 
     }

@@ -61,6 +61,8 @@
         <activity
             android:name=".MyProfile"
             android:screenOrientation="portrait" />
+        <activity android:name=".ProblemsFeed"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

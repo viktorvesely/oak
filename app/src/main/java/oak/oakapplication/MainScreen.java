@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -66,6 +68,9 @@ public class MainScreen extends Menu{
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private RadioGroup mCategories;
+    private SwipeRefreshLayout mRefreshSwipe;
+    private ArrayList<Post> mPostsToShow;
+
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
@@ -84,21 +89,30 @@ public class MainScreen extends Menu{
 
         //find views
 
-
+        mRefreshSwipe = findViewById(R.id.sc_refresh);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
         mCategories = findViewById(R.id.rb_categories);
 
         //Init
+        mPostsToShow = new ArrayList<>();
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mPostRef = mRootRef.child("Posts");
         mUserRef = mRootRef.child("Users");
         mFirebaseAuth = FirebaseAuth.getInstance();
         mCategories.check(R.id.rb_problems);
-        adapter = new PostArrayAdapter(this, OakappMain.postsToShow, RB_SOLVED);
+        adapter = new PostArrayAdapter(this, mPostsToShow, RB_SOLVED);
         mPostsListView.setAdapter(adapter);
 
         //listeners
+        mRefreshSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                detachDatabaseReadListener();
+                attachDatabaseReadListener();
+
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,15 +122,16 @@ public class MainScreen extends Menu{
             }
         });
 
+
         mCategories.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.rb_problems:
-                        adapter = new PostArrayAdapter(getBaseContext(), OakappMain.postsToShow, RB_SOLVED);
+                        adapter = new PostArrayAdapter(getBaseContext(), mPostsToShow, RB_SOLVED);
                         break;
                     case R.id.rb_solved:
-                        adapter = new PostArrayAdapter(getBaseContext(), OakappMain.postsToShow, RB_PROBLEMS);
+                        adapter = new PostArrayAdapter(getBaseContext(), mPostsToShow, RB_PROBLEMS);
                         break;
                 }
                 mPostsListView.setAdapter(adapter);
@@ -129,7 +144,9 @@ public class MainScreen extends Menu{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent openPost = new Intent(MainScreen.this, oak.oakapplication.openPost.class);
-                openPost.putExtra("id",position);
+                Post p = mPostsToShow.get(position);
+                String obj = new Gson().toJson(p);
+                openPost.putExtra("post", obj);
                 startActivity(openPost);
             }
         });
@@ -257,14 +274,16 @@ public class MainScreen extends Menu{
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Post post = dataSnapshot.getValue(Post.class);
-                if (post.mActive == true || AdminSettings.showInActivePosts == true && OakappMain.user.mAdmin == true) {
-                    //OakappMain.postsToShow.add(post);
-                    adapter.add(post);
+                if (post.mActive || AdminSettings.showInActivePosts && OakappMain.user.mAdmin) {
+                    mPostsToShow.add(post);
+                    mRefreshSwipe.setRefreshing(false);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
 
             }
 
@@ -290,6 +309,7 @@ public class MainScreen extends Menu{
     private void detachDatabaseReadListener() {
         if (mPostListener != null) {
             mPostRef.removeEventListener(mPostListener);
+            adapter.clear();
             mPostListener = null;
         }
     }

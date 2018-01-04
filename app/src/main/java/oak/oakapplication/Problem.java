@@ -27,12 +27,14 @@ public class Problem {
         this.mJoinable = true;
         this.mOwner = "INIT";
         this.mActive = true;
+        this.mDisplayNames = new ArrayList<>();
     }
 
     Problem() {
         this.mWorking = new ArrayList<>();
         this.mStartedWorking = new ArrayList<>();
         this.mBanList = new ArrayList<>();
+        this.mDisplayNames = new ArrayList<>();
         this.mName = "INIT";
         this.mJoinable = true;
         this.mOwner = "INIT";
@@ -46,10 +48,20 @@ public class Problem {
             return false;
         mBanList.add(userID);
         mWorking.remove(index);
+        mDisplayNames.remove(index);
         return true;
     }
 
+
+
+    public List<String> getParticipantsIDs() {return  mWorking;}
+
+    public String getParticipantName(int index) {return mDisplayNames.get(index);}
+
+    public List<String> getParticipantNames(){return mDisplayNames;}
+
     public void setName(String name) { mName = name; }
+
     public String getName () { return mName; }
 
     public void setJoinAbilitie(boolean status) {mJoinable = status;}
@@ -61,7 +73,7 @@ public class Problem {
     }
 
 
-    public int addWorker(String userID) {
+    public int addWorker(String userID, String displayName) {
         if (mWorking.size() < 6) {
             mStartedWorking.add(System.currentTimeMillis());
 
@@ -76,7 +88,7 @@ public class Problem {
                 return Responses.BANNED;
             }
             mWorking.add(userID);
-
+            mDisplayNames.add(displayName);
             if (! userID.equals("INIT")) {
                 OakappMain.getPostByKey(mParent, new PostListener() {
                     @Override
@@ -148,6 +160,7 @@ public class Problem {
     public List<String> mBanList;
     public List<String> mWorking;
     public List<Long> mStartedWorking;
+    public List<String> mDisplayNames;
     public boolean mJoinable;
 
     public class Responses {

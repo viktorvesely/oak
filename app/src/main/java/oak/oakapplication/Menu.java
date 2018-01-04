@@ -29,6 +29,7 @@ public class Menu extends AppCompatActivity {
             public static final int SIGNOUT = 4;
             public static final int ADMIN = 5;
             public static final int TIPS = 6;
+            public static final int PROBLEMSFEED = 7;
 
         }
 
@@ -66,6 +67,9 @@ public class Menu extends AppCompatActivity {
                     AuthUI.getInstance().signOut(this);
                     break;
 
+                case MenuOptions.PROBLEMSFEED:
+                    startActivity(new Intent(getApplicationContext(), ProblemsFeed.class));
+                    break;
 
                 default:
                     break;

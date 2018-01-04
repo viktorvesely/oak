@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,6 @@ public class openPost extends AppCompatActivity {
     private static final int MINPLUSESTOBETOP = 10;
     private static  final int MAXWORKERS = 5;
 
-    private OakappMain main;
 
     private ListView listView_comments;
     private TextView mText;
@@ -62,7 +62,6 @@ public class openPost extends AppCompatActivity {
     private TextView mOwnerName;
     private TextView mParticipants;
 
-    private boolean mIsPublic;
 
 
     @Override
@@ -86,8 +85,7 @@ public class openPost extends AppCompatActivity {
 
         adapter = new CommentArrayAdapter(this,mComments);
         listView_comments.setAdapter(adapter);
-        main = (OakappMain) getApplicationContext();
-        mPost = OakappMain.postsToShow.get(getIntent().getIntExtra("id", 0));
+        mPost = new Gson().fromJson(getIntent().getStringExtra("post"), Post.class);
         final Problem  mProblem = new Problem(mPost.mKey);
         OakappMain.getUserByUid(mPost.mOwner, new UserInterface() {
             @Override
@@ -125,7 +123,7 @@ public class openPost extends AppCompatActivity {
                         }
 
 
-                        switch (p.addWorker(OakappMain.user.mId)) {
+                        switch (p.addWorker(OakappMain.user.mId, OakappMain.user.mUniqueName)) {
                             case Problem.Responses.BANNED:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(openPost.this);
                                 View v = getLayoutInflater().inflate(R.layout.dialog_box_kicked, null);

@@ -239,7 +239,7 @@ public class PostsActivity extends AppCompatActivity {
                 OakappMain.SaveUserByUid(OakappMain.user);
                 OakappMain.SavePostByKey(post);
                 Problem problem = new Problem(post.mKey);
-                problem.addWorker("INIT");
+                problem.addWorker("INIT", "INIT");
                 problem.setJoinAbilitie(true);
                 problem.save();
 

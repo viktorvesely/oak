@@ -61,7 +61,6 @@ public class OakappMain extends Application {
         user = new User();
         firebaseUser = null;
         selfPointer = this;
-        postsToShow = new ArrayList<Post>();
         rankBorders = new ArrayList<Long>();
         remoteConfig = FirebaseRemoteConfig.getInstance();
         loacationProvider = LocationServices.getFusedLocationProviderClient(this);
@@ -348,7 +347,6 @@ public class OakappMain extends Application {
 
     public static FirebaseRemoteConfig remoteConfig;
 
-    public static ArrayList<Post> postsToShow;
     public static User user;
     public static FirebaseUser firebaseUser;
 
