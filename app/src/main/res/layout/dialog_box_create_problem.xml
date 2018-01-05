@@ -25,13 +25,14 @@
 
         <Switch
             android:id="@+id/s_joinable"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/db_create_problem_rb_joinable" />
+            android:text="@string/db_create_problem_rb_joinable"
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/tv_problem_warning"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/db_create_problem_tv_warning"
             android:textSize="16sp"

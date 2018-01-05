@@ -54,11 +54,17 @@ public class Problem {
 
 
 
-    public List<String> getParticipantsIDs() {return  mWorking;}
+    public List<String> getParticipantsIDs() {
+        if (mWorking.size() <= 1) {return null;}
+        return mWorking.subList(1, mWorking.size() -1);
+    }
 
     public String getParticipantName(int index) {return mDisplayNames.get(index);}
 
-    public List<String> getParticipantNames(){return mDisplayNames;}
+    public List<String> getParticipantNames(){
+        if (mDisplayNames.size() <= 1) {return null;}
+        return mDisplayNames.subList(1, mDisplayNames.size() -1);
+    }
 
     public void setName(String name) { mName = name; }
 
@@ -66,15 +72,12 @@ public class Problem {
 
     public void setJoinAbilitie(boolean status) {mJoinable = status;}
     public boolean canJoin() {
-        if (mWorking.get(mWorking.size() -1).equals("INIT")) {
-            return true;
-        }
-        else {return  mJoinable;}
+        return mWorking.size() == 0 || mWorking.get(mWorking.size() -1).equals("INIT") || mWorking.size() < 6 || mJoinable;
     }
 
 
     public int addWorker(String userID, String displayName) {
-        if (mWorking.size() < 6) {
+        if (canJoin()) {
             mStartedWorking.add(System.currentTimeMillis());
 
             if (mWorking.contains(userID)) {

@@ -2,6 +2,7 @@ package oak.oakapplication;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -133,8 +134,8 @@ public class openPost extends AppCompatActivity {
                                 break;
                             case Problem.Responses.ADDED:
                                 mPost.mIsWorkedOn = true;
+                                OakappMain.user.mActiveProblems.add(p.mParent);
                                 OakappMain.SavePostByKey(mPost);
-                                OakappMain.user.mActiveProblems.add(mPost.mKey);
                                 Snackbar.make(view,R.string.added_to_your_problems, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                 break;
                             case Problem.Responses.ALREADYIN:
@@ -297,6 +298,8 @@ public class openPost extends AppCompatActivity {
                 p.setJoinAbilitie(joinAble.isChecked());
                 p.setName(name);
                 p.save();
+                OakappMain.user.mActiveProblems.add(p.mParent);
+                OakappMain.SaveUserByUid(OakappMain.user);
                 dialog.dismiss();
             }
         });

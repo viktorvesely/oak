@@ -89,6 +89,8 @@
     <string name="problems_feed_tv_not_all_items_were_loaded">Niktore problemy sa nenacitali skus. Skus to este raz.</string>
     <string name="problem_item_b_canel_problem">Neriesit</string>
     <string name="problem_item_b_solved">Vyrieseny</string>
+    <string name="address_found">Adressa sa nasla</string>
+    <string name="address_could_not_been_found">Adressa sa nenasla</string>
 
     <string name="b_edit_participant_kick_out">Vyhodit</string>
     <string name="b_edit_participant_show_contact">Kontakt</string>

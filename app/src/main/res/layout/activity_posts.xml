@@ -37,6 +37,14 @@
             android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/b_addImg1" />
 
+        <TextView
+            android:id="@+id/tv_address_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_green_light"
+            tools:text="Adresa sa nasla" />
+
         <Button
             android:id="@+id/b_addImg1"
             android:layout_width="wrap_content"

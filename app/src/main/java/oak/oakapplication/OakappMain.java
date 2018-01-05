@@ -61,15 +61,10 @@ public class OakappMain extends Application {
         user = new User();
         firebaseUser = null;
         selfPointer = this;
-        rankBorders = new ArrayList<Long>();
-        remoteConfig = FirebaseRemoteConfig.getInstance();
-        loacationProvider = LocationServices.getFusedLocationProviderClient(this);
+        rankBorders = new ArrayList<>();
+        //LocationServices.getFusedLocationProviderClient(this);
+        fuckYouGarbageCleaner = this;
 
-
-        long numberOfRanks = remoteConfig.getLong("count_levels");
-        for (int i = 2; i < numberOfRanks + 1; ++i) {
-            OakappMain.rankBorders.add(remoteConfig.getLong("rep_min_" + String.valueOf(i) + "_level" ));
-        }
 
         locationListener = new LocationListener() {
             @Override
@@ -340,12 +335,10 @@ public class OakappMain extends Application {
 
     public static LocationListener locationListener;
     public static Location lastLocation;
-    private static FusedLocationProviderClient loacationProvider;
     public static LocationRequest mLocationManager;
     private static final float LOCATION_REFRESH_DISTANCE = 100;
     private static final long LOCATION_REFRESH_TIME = 1000 * 60 *1;
 
-    public static FirebaseRemoteConfig remoteConfig;
 
     public static User user;
     public static FirebaseUser firebaseUser;
@@ -356,6 +349,7 @@ public class OakappMain extends Application {
     public static final String NO_PICTURE = "no_pic";
     public static final String THIS_USER = "this";
     public static boolean UserAlreadyExist = false;
+    public static OakappMain fuckYouGarbageCleaner;
 
 
     public static ArrayList<Long> rankBorders;

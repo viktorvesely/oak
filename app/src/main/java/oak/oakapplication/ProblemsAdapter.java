@@ -30,7 +30,7 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
 
     @Override
     public ProblemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View problemView = LayoutInflater.from(mContext).inflate(R.layout.problem_item, parent);
+        View problemView = LayoutInflater.from(mContext).inflate(R.layout.problem_item, null);
         return  new ProblemViewHolder(problemView);
     }
 
@@ -45,7 +45,9 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
         return mProblems.size();
     }
 
-
+    void add(Problem p) {
+        mProblems.add(p);
+    }
 
     public class ProblemViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
@@ -55,6 +57,8 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
         private Context mContext;
         private List<String> names;
         private List<String> ids;
+        private View.OnClickListener mLeaveListener;
+        private View.OnClickListener mSolvedListener;
 
         ProblemViewHolder(View item) {
             super(item);
@@ -63,6 +67,23 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
             mSolved = item.findViewById(R.id.b_solved_problem);
             mLeave = item.findViewById(R.id.b_leave_problem);
             mContext = item.getContext();
+
+            mLeaveListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Problem p = (Problem) view.getTag();
+                }
+            };
+
+            mSolvedListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Problem p = (Problem) view.getTag();
+                }
+            };
+
+            mSolved.setOnClickListener(mSolvedListener);
+            mLeave.setOnClickListener(mLeaveListener);
         }
 
         public void activate(final Problem problem) {
@@ -77,21 +98,8 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
             mParticipants.setAdapter(adapter);
             mSolved.setTag(problem);
             mLeave.setTag(problem);
-
-            mSolved.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Problem p = (Problem) view.getTag();
-                }
-            });
-
-            mLeave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Problem p = (Problem) view.getTag();
-                }
-            });
         }
+
 
         class UserInfo {
             UserInfo(String name, String id, Problem p){

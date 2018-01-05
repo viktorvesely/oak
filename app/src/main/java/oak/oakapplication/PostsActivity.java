@@ -1,6 +1,7 @@
 package oak.oakapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -11,13 +12,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -67,6 +71,7 @@ public class PostsActivity extends AppCompatActivity {
     private RatingBar mRB_2;
     private RatingBar mRB_3;
     private EditText mFeedback_com;
+    private TextView mAddressOutput;
     boolean mIsUploading;
 
     private int mType1=0;
@@ -79,6 +84,8 @@ public class PostsActivity extends AppCompatActivity {
     private final static int MaxTagsPerPost = 3;
     private Uri mImgUrl1;
     private Uri mImgUrl2;
+    private double mLongitude;
+    private double mLatitude;
 
     private int mSelectedImg;
 
@@ -86,7 +93,7 @@ public class PostsActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posts);
         main = ((OakappMain)getApplicationContext());
@@ -106,10 +113,34 @@ public class PostsActivity extends AppCompatActivity {
         mAddImage1 = (Button) findViewById(R.id.b_addImg1);
         mAddImage2 = (Button) findViewById(R.id.b_addImg2);
         mFeedbackButton = (Button) findViewById(R.id.b_addFeedback);
-
+        mAddressOutput = findViewById(R.id.tv_address_output);
 
         geocoder = new Geocoder(this);
 
+
+        mAddress.setOnEditorActionListener(    new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
+                        event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) ||
+                        actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)  {
+                    if (event == null ||!event.isShiftPressed()) {
+                        AddressOutput();
+                        return true; // consume.
+                    }
+                }
+                return false; // pass on to other listeners.
+            }
+        });
+
+        mAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    AddressOutput();
+                }
+            }
+        });
 
         mAddImage1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,9 +240,7 @@ public class PostsActivity extends AppCompatActivity {
                     return;
                 }
 
-                List<Address> addresses = null;
-                double longitude = 0;
-                double latitude = 0;
+
 
                 String imgaddr1 = "";
                 String imgaddr2 = "";
@@ -220,20 +249,8 @@ public class PostsActivity extends AppCompatActivity {
                 if (mPostText.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_text), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
                 if (mTitle.getText().toString().isEmpty()) { Snackbar.make(v, getString(R.string.no_title), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
 
-                try {
-                    addresses = geocoder.getFromLocationName(mAddress.getText().toString(),1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(addresses == null) { Snackbar.make(v, getString(R.string.no_address_found), Snackbar.LENGTH_LONG).setAction("Action", null).show();}
-                else if(addresses.size() > 0) {
-                        latitude= addresses.get(0).getLatitude();
-                        longitude= addresses.get(0).getLongitude();
-                }
 
-
-
-                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, 0, latitude, longitude,true);
+                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, 0, mLatitude, mLongitude,true);
                 post.mKey = postRef.push().getKey();
                 OakappMain.user.mOwnPosts.add(post.mKey);
                 OakappMain.SaveUserByUid(OakappMain.user);
@@ -308,6 +325,26 @@ public class PostsActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.upload_success), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
+        }
+    }
+
+    private void AddressOutput() {
+        // the user is done typing.
+        List<Address> addresses = null;
+        mLongitude = 0;
+        mLatitude = 0;
+
+        try {
+            addresses = geocoder.getFromLocationName(mAddress.getText().toString(),1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(addresses == null || addresses.size() == 0) { mAddressOutput.setText(R.string.address_could_not_been_found); mAddressOutput.setTextColor(Color.RED); }
+        else if(addresses.size() > 0) {
+            mLatitude= addresses.get(0).getLatitude();
+            mLongitude = addresses.get(0).getLongitude();
+            mAddressOutput.setText(R.string.address_found);
+            mAddressOutput.setTextColor(Color.GREEN);
         }
     }
 
