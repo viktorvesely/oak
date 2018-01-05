@@ -1,5 +1,7 @@
 package oak.oakapplication;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +22,6 @@ public class Feedback {
         this.mT_1 = b;
         this.mT_2 = c;
         this.mT_3 = d;
-
     }
 
     public int Avg () {

@@ -21,9 +21,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 public class openFeedback extends Menu {
@@ -50,9 +55,9 @@ public class openFeedback extends Menu {
     private ArrayAdapter menu;
     private Intent intent;
     private Button mContactButton;
+    private Button mDirections;
     private TextView mTitle;
-    private TextView mUlica;
-    private TextView mUrad_hodiny;
+    private Button mWeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,10 @@ public class openFeedback extends Menu {
         mTitle = (TextView) findViewById(R.id.tv_title);
         mTitle.setText(getResources().getStringArray(R.array.mestske_casti)[Integer.parseInt(cast)]);
 
+        mWeb = (Button) findViewById(R.id.b_web);
+        mDirections = (Button) findViewById(R.id.b_directions);
+
+
         mComments = new ArrayList<FeedbackComment>();
         mCommentList = (ListView) findViewById(R.id.lv_com);
 
@@ -82,10 +91,8 @@ public class openFeedback extends Menu {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 OnMenuItemSelected(position);
                 mDrawerLayout.closeDrawers();
-
             }
         });
 
@@ -134,17 +141,19 @@ public class openFeedback extends Menu {
         mMediumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {   if (initialDisplay == false) {
-                if (pos==0) {
-                    ChangeMedium(Fb, 0);
-                } else if (pos==1) {
-                    ChangeMedium(Tel, 1);
-                } else {
-                    ChangeMedium(Mail, 2);
+                switch(pos){
+                    case 0:
+                        ChangeMedium(Fb, 0);
+                        break;
+                    case 1:
+                        ChangeMedium(Tel, 0);
+                        break;
+                    case 2:
+                        ChangeMedium(Mail, 0);
                 }
             } else {
                 initialDisplay = false;
             }
-
 
             }
             public void onNothingSelected(AdapterView<?> parent)
@@ -152,21 +161,35 @@ public class openFeedback extends Menu {
             }
         });
 
+        mDirections.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View view) {
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=Planét 17, Bratislava");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+            }
+        });
+
+        mWeb.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //String id = getResources().getStringArray(R.array.web)[Integer.parseInt(cast)];
+                String id = "http://www.staremesto.sk";
+                Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(id));
+                startActivity(web);
+            }
+        });
+
         mContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (current) {
-
                     case 0:
                         String id = getResources().getStringArray(R.array.facebook)[Integer.parseInt(cast)];
+                        Intent fb = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + id));
+                        startActivity(fb);
 
-                        try {
-                            Intent fb = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + id));
-                            startActivity(fb);
-                        } catch (Exception e) {
-                            Intent fb = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + id));
-                            startActivity(fb);
-                        }
                         break;
 
                     case 1:
@@ -178,17 +201,10 @@ public class openFeedback extends Menu {
                     case 2:
                         String TO = getResources().getStringArray(R.array.mail)[Integer.parseInt(cast)];
                         Intent mail = new Intent(Intent.ACTION_SEND);
-
                         mail.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
                         mail.setType("message/rfc822");
-
-                        try {
-                            startActivity(Intent.createChooser(mail, "Send mail..."));
-                        } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(getApplicationContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
-                        }
+                        startActivity(Intent.createChooser(mail, "Send mail..."));
                         break;
-
                 }
             }
         });
@@ -218,7 +234,6 @@ public class openFeedback extends Menu {
                             }
                             adapter = new FeedbackCommentArrayAdapter(getApplicationContext(), mComments);
                             mCommentList.setAdapter(adapter);
-
                         }
                     }
 

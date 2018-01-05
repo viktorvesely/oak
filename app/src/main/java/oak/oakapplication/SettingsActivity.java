@@ -1,5 +1,6 @@
 package oak.oakapplication;
 
+        import android.app.AlertDialog;
         import android.content.Context;
         import android.content.Intent;
         import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ package oak.oakapplication;
         import android.preference.RingtonePreference;
         import android.text.TextUtils;
         import android.view.MenuItem;
+        import android.view.View;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -34,9 +36,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_main);
 
             Preference sendFeedback = findPreference("key_send_feedback");
+            Preference Donate = findPreference("key_donate");
+
             sendFeedback.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     sendFeedback(getActivity());
+                    return true;
+                }
+            });
+
+            Donate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+
                     return true;
                 }
             });
@@ -58,5 +69,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         mail.setType("message/rfc822");
 
         context.startActivity(mail);
+    }
+
+    public void openDonate(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(SettingsActivity.this);
+
+        View mView = getLayoutInflater().inflate(R.layout.activity_new_feedback, null);
+        mBuilder.setTitle("Feedback");
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+
+        dialog.show();
     }
 }

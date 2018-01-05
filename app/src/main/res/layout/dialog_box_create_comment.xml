@@ -17,7 +17,7 @@
 
     <CheckBox
         android:id="@+id/cb_directComment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
         android:text="@string/createCom_cb_dc" />

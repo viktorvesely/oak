@@ -207,7 +207,27 @@
         <item>starosta@bratislava-rusovce.sk</item>
         <item>miestnyurad@mc-cunovo.sk</item>
         <item>info@bratislava.sk</item>
+    </string-array>
 
+    <string-array name="web">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
 
     </string-array>
 

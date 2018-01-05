@@ -12,10 +12,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
@@ -81,8 +83,12 @@ public class MainScreen extends Menu{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_actionbar);
         setSupportActionBar(toolbar);
+        LayoutInflater mInflater= LayoutInflater.from(getApplicationContext());
+        View mCustomView = mInflater.inflate(R.layout.action_bar_main_screen, null);
+        toolbar.addView(mCustomView);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         HasInternet toGarbage = new HasInternet();
         toGarbage.execute();
@@ -121,6 +127,7 @@ public class MainScreen extends Menu{
                 startActivity(newPost);
             }
         });
+
 
 
         mCategories.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -379,4 +386,5 @@ public class MainScreen extends Menu{
     }
     public static final int RB_PROBLEMS = 0;
     public static final int RB_SOLVED  = 1;
+
 }

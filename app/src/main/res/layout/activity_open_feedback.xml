@@ -20,23 +20,17 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
-        <TextView
-            android:id="@+id/tv_ulica"
+        <Button
+            android:id="@+id/b_directions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Button" />
 
-        <TextView
-            android:id="@+id/tv_urad_hod"
+        <Button
+            android:id="@+id/b_web"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/tv_datum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Button" />
 
         <TextView
             android:id="@+id/tv_web"
@@ -48,12 +42,6 @@
             android:id="@+id/sp_komunikacia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/b_contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
 
         <TextView
             android:id="@+id/textView"
@@ -106,7 +94,13 @@
         <ListView
             android:id="@+id/lv_com"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/b_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
     </LinearLayout>
 
 
