@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.location.Location;
 import com.facebook.FacebookSdk;
+
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -114,6 +116,16 @@ public class MainScreen extends Menu{
         mRefreshSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mPostsToShow.size() == 0) {
+                            mRefreshSwipe.setRefreshing(false);
+                            Snackbar.make( findViewById(android.R.id.content), R.string.problems_feed_tv_error, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        }
+                    }
+                }, 1000 * SECONDSTOLOAD);
                 detachDatabaseReadListener();
                 attachDatabaseReadListener();
 
@@ -386,5 +398,5 @@ public class MainScreen extends Menu{
     }
     public static final int RB_PROBLEMS = 0;
     public static final int RB_SOLVED  = 1;
-
+    private  final int SECONDSTOLOAD = 10;
 }

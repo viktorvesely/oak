@@ -5,11 +5,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,6 +30,7 @@ public class ProblemsFeed extends AppCompatActivity {
     private ArrayList<ListenerInfo> listeners;
     private  boolean mErrorWhileLoading;
     private Handler handler;
+    LinearLayoutManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class ProblemsFeed extends AppCompatActivity {
 
         mErrorWhileLoading = false;
 
-        if (OakappMain.user.mActiveProblems.size() == 0) {
+        if (OakappMain.user.mActiveProblems.size() - 1 <= 0) {
             Snackbar.make(findViewById(android.R.id.content) ,R.string.problems_feed_tv_no_problems, Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         else {
@@ -56,6 +59,7 @@ public class ProblemsFeed extends AppCompatActivity {
                 mProblems.setVisibility(View.VISIBLE);
                 output.setVisibility(View.GONE);
                 stopAndDeleteListeners();
+                problems = new ArrayList<>();
                 LoadProblems();
             }
         });
@@ -68,7 +72,7 @@ public class ProblemsFeed extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (adapter == null) {
+                if (problems.size() != OakappMain.user.mActiveProblems.size() - 1) {
                     mErrorWhileLoading = true;
                     if (problems.size() == 0) {
                         Snackbar.make(findViewById(android.R.id.content) ,R.string.problems_feed_tv_error, Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -82,28 +86,54 @@ public class ProblemsFeed extends AppCompatActivity {
             }
         }, 1000 * SECONDSTOLOAD);
 
+        adapter = new ProblemsAdapter(ProblemsFeed.this, problems);
+        mProblems.setAdapter(adapter);
+        manager = new LinearLayoutManager(getBaseContext());
+        mProblems.setLayoutManager(manager);
+
         for(int i = 0, size = OakappMain.user.mActiveProblems.size(); i < size; ++i){
-            String filter = OakappMain.user.mActiveProblems.get(i);
+            final String filter = OakappMain.user.mActiveProblems.get(i);
+            if (filter.equals("INIT")) {
+                continue;
+            }
             Query query = FirebaseDatabase.getInstance().getReference().child("Problems").orderByChild("mParent").equalTo(filter);
 
-             listeners.add(new ListenerInfo(new ValueEventListener() {
+            listeners.add(new ListenerInfo(new ChildEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    problems.add(dataSnapshot.getValue(Problem.class));
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Problem p = dataSnapshot.getValue(Problem.class);
+                    adapter.add(dataSnapshot.getValue(Problem.class));
+                    adapter.notifyItemInserted(problems.size() - 1);
                     if (mRefresh.isRefreshing()) {mRefresh.setRefreshing(false);}
-                    if (problems.size() == OakappMain.user.mActiveProblems.size() && !mErrorWhileLoading) {
-                        adapter = new ProblemsAdapter(ProblemsFeed.this, problems);
-                        mProblems.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    if (problems.size() == OakappMain.user.mActiveProblems.size() - 1) {
+                        stopAndDeleteListeners();
                     }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }, query));
+            },query));
 
-            query.addListenerForSingleValueEvent(listeners.get(listeners.size() -1).mListener);
+
+            query.addChildEventListener(listeners.get(listeners.size() -1).mListener);
 
         }
 
@@ -121,11 +151,11 @@ public class ProblemsFeed extends AppCompatActivity {
     private static final int SECONDSTOLOAD = 10;
 
     private class ListenerInfo {
-        ListenerInfo(ValueEventListener listener, Query query) {
+        ListenerInfo(ChildEventListener listener, Query query) {
             mListener = listener;
             mQuery = query;
         }
-        ValueEventListener mListener;
+        ChildEventListener mListener;
         Query mQuery;
     }
 }

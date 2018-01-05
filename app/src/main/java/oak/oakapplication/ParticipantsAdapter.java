@@ -30,23 +30,23 @@ public class ParticipantsAdapter extends ArrayAdapter<ProblemsAdapter.ProblemVie
         mInfos = names;
     }
 
-    @Override
+    
     public View getView(int position, View viewConverter, ViewGroup parent) {
         final ProblemsAdapter.ProblemViewHolder.UserInfo info = mInfos.get(position);
         final TextView display;
-
+        TV v = null;
         if (viewConverter == null) {
             viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.text_view_item, parent, false);
-            display = viewConverter.findViewById(R.id.tv_simple);
-            viewConverter.setTag(display);
+            v = new TV(viewConverter);
+            viewConverter.setTag(v);
         }
         else {
-            display = (TextView) viewConverter.getTag();
+            v = (TV) viewConverter.getTag();
         }
 
-        display.setText(info.mName);
-        display.setTag(info);
-        display.setOnClickListener(new View.OnClickListener() {
+        v.display.setText(info.mName);
+        v.display.setTag(info);
+        v.display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 final ProblemsAdapter.ProblemViewHolder.UserInfo info = (ProblemsAdapter.ProblemViewHolder.UserInfo) view.getTag();
@@ -80,7 +80,20 @@ public class ParticipantsAdapter extends ArrayAdapter<ProblemsAdapter.ProblemVie
             }
         });
         return viewConverter;
-    };
+    }
+
+    @Override
+    public int getCount(){
+        return mInfos.size();
+    }
 
 
+}
+
+
+class TV {
+    TV(View v) {
+        display = v.findViewById(R.id.tv_simple);
+    }
+    public TextView display;
 }
