@@ -1,7 +1,11 @@
 package oak.oakapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +74,93 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
 
             mLeaveListener = new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Problem p = (Problem) view.getTag();
+                public void onClick(final View view) {
+                    //TODO: remove reputation based on time
+                    final Problem p = (Problem) view.getTag();
+                    if (p.mOwner.equals(OakappMain.user.mId)) {
+
+                        DialogInterface.OnClickListener leaveOwner = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                switch (i){
+                                    case DialogInterface.BUTTON_POSITIVE:
+
+                                        p.ownerLeft(new OwnerInterface() {
+                                            @Override
+                                            public void lobbyDestroyed(boolean success) {
+                                                if (success) {
+                                                    if (p.kickUser(OakappMain.user.mId)) {
+                                                        int id = mProblems.indexOf(p);
+                                                        mProblems.remove(id);
+                                                        notifyItemRemoved(id);
+                                                        notifyDataSetChanged();
+                                                        Snackbar.make(view.getRootView(), R.string.leave_message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                                        OakappMain.user.mActiveProblems.remove(p.mParent);
+                                                        OakappMain.SaveUserByUid(OakappMain.user);
+                                                        OakappMain.getPostByKey(p.mParent, new PostListener() {
+                                                            @Override
+                                                            public void OnFinished(Post p) {
+                                                                p.mIsWorkedOn = false;
+                                                                OakappMain.SavePostByKey(p);
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        Log.e(TAG, "The user " + OakappMain.user.mUsername + " could not be kicked from problem." );
+                                                    }
+                                                }
+                                                else {
+                                                    Log.e(TAG, "Could not destroyed the problem group properly");
+                                                }
+                                            }
+                                        });
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        dialogInterface.dismiss();
+                                        break;
+                                }
+                            }
+
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        builder.setMessage(R.string.leave_from_problem_owner).setPositiveButton("Áno", leaveOwner)
+                                .setNegativeButton("Nie", leaveOwner).show();
+
+
+                    }
+                    else {
+                        DialogInterface.OnClickListener leaveNotOwner = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                switch (i){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        if (p.kickUser(OakappMain.user.mId)) {
+                                            int id = mProblems.indexOf(p);
+                                            mProblems.remove(id);
+                                            notifyItemRemoved(id);
+                                            notifyDataSetChanged();
+                                            OakappMain.user.mActiveProblems.remove(p.mParent);
+                                            OakappMain.SaveUserByUid(OakappMain.user);
+                                            Snackbar.make(view.getRootView(), R.string.leave_message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                        }
+                                        else {
+                                            Log.e(TAG, "The user " + OakappMain.user.mUsername + " could not be kicked from problem." );
+                                        }
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        dialogInterface.dismiss();
+                                        break;
+                                }
+                            }
+
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        builder.setMessage(R.string.leave_from_problem_not_owner).setPositiveButton("Áno", leaveNotOwner)
+                                .setNegativeButton("Nie", leaveNotOwner).show();
+
+                    }
                 }
             };
 
@@ -81,6 +170,9 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
                     Problem p = (Problem) view.getTag();
                 }
             };
+
+
+
 
             mSolved.setOnClickListener(mSolvedListener);
             mLeave.setOnClickListener(mLeaveListener);
@@ -112,4 +204,5 @@ public class ProblemsAdapter extends RecyclerView.Adapter<ProblemsAdapter.Proble
             public String mId;
         }
     }
+    private static final String TAG = "ProblemsAdapter";
 }

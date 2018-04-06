@@ -98,6 +98,7 @@ public class ProblemsFeed extends AppCompatActivity {
             }
             Query query = FirebaseDatabase.getInstance().getReference().child("Problems").orderByChild("mParent").equalTo(filter);
 
+
             listeners.add(new ListenerInfo(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {

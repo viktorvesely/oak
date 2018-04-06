@@ -30,23 +30,22 @@ public class ParticipantsAdapter extends ArrayAdapter<ProblemsAdapter.ProblemVie
         mInfos = names;
     }
 
-    
+
     public View getView(int position, View viewConverter, ViewGroup parent) {
         final ProblemsAdapter.ProblemViewHolder.UserInfo info = mInfos.get(position);
         final TextView display;
-        TV v = null;
+        if (info.mId.equals(OakappMain.user.mId)) {
+          return LayoutInflater.from(getContext()).inflate(R.layout.empty, parent, false);
+        }
         if (viewConverter == null) {
             viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.text_view_item, parent, false);
-            v = new TV(viewConverter);
-            viewConverter.setTag(v);
-        }
-        else {
-            v = (TV) viewConverter.getTag();
+            viewConverter.setTag(info);
         }
 
-        v.display.setText(info.mName);
-        v.display.setTag(info);
-        v.display.setOnClickListener(new View.OnClickListener() {
+        display =  viewConverter.findViewById(R.id.tv_simple);
+        display.setText(info.mName);
+        display.setTag(info);
+        display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 final ProblemsAdapter.ProblemViewHolder.UserInfo info = (ProblemsAdapter.ProblemViewHolder.UserInfo) view.getTag();
@@ -90,10 +89,3 @@ public class ParticipantsAdapter extends ArrayAdapter<ProblemsAdapter.ProblemVie
 
 }
 
-
-class TV {
-    TV(View v) {
-        display = v.findViewById(R.id.tv_simple);
-    }
-    public TextView display;
-}

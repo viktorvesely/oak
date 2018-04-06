@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,6 +49,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.gson.Gson;
 
@@ -74,6 +77,7 @@ public class MainScreen extends Menu{
     private RadioGroup mCategories;
     private SwipeRefreshLayout mRefreshSwipe;
     private ArrayList<Post> mPostsToShow;
+    private Handler handler;
 
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -84,6 +88,7 @@ public class MainScreen extends Menu{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_actionbar);
         setSupportActionBar(toolbar);

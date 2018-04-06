@@ -2,8 +2,10 @@ package oak.oakapplication;
 
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -27,7 +29,9 @@ public class Problem {
         this.mJoinable = true;
         this.mOwner = "INIT";
         this.mActive = true;
+        this.mText = "INIT";
         this.mDisplayNames = new ArrayList<>();
+        this.mCount = 0;
     }
 
     Problem() {
@@ -39,7 +43,9 @@ public class Problem {
         this.mJoinable = true;
         this.mOwner = "INIT";
         this.mParent = "INIT";
+        this.mText = "INIT";
         this.mActive = true;
+        this.mCount = 0;
     }
 
     public boolean kickUser(String userID) {
@@ -48,6 +54,7 @@ public class Problem {
             return false;
         mBanList.add(userID);
         mWorking.remove(index);
+        mStartedWorking.remove(index);
         mDisplayNames.remove(index);
         return true;
     }
@@ -131,6 +138,45 @@ public class Problem {
         save();
     }
 
+    public void ownerLeft(final OwnerInterface owner) {
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+        mCount = 0;
+        for (int i = 0; i < mWorking.size(); ++i ) {
+            String id = mWorking.get(i);
+            Query filter = users.orderByChild("mId").equalTo(id);
+            filter.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    User u = dataSnapshot.getValue(User.class);
+                    if (u == null) {
+                        owner.lobbyDestroyed(false);
+                    }
+                    else {
+                        u.mActiveProblems.remove(mParent);
+                        OakappMain.SaveUserByUid(u);
+                        mCount++;
+                        if (mCount == mWorking.size()) {
+                            owner.lobbyDestroyed(true);
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("Problem-class",databaseError.getMessage());
+                }
+            });
+        }
+    }
 
 
     public void save() {
@@ -157,6 +203,7 @@ public class Problem {
     }
 
     public String mParent;
+    public String mText;
     public String mOwner;
     public String mName;
     public boolean mActive;
@@ -173,5 +220,7 @@ public class Problem {
         public static final int ADDED = 3;
         public static final int OWNER = 4;
     }
+
+    private int mCount;
 
 }
